@@ -132,13 +132,14 @@ function getJsonStats(data: unknown): JsonStats {
     } else if (Array.isArray(obj)) {
       stats.arrays++
       stats.values++
-      obj.forEach((item) => analyze(item, currentDepth + 1))
-    } else if (typeof obj === 'object') {
+      (obj as unknown[]).forEach((item) => analyze(item, currentDepth + 1))
+    } else if (typeof obj === 'object' && obj !== null) {
       stats.objects++
       stats.values++
-      Object.keys(obj).forEach((key) => {
+      const record = obj as Record<string, unknown>
+      Object.keys(record).forEach((key) => {
         stats.keys++
-        analyze(obj[key], currentDepth + 1)
+        analyze(record[key], currentDepth + 1)
       })
     }
   }

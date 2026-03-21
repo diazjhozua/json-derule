@@ -87,56 +87,60 @@ function findDifferences(obj1: unknown, obj2: unknown, path: string): Difference
 
   // Handle arrays
   if (Array.isArray(obj1) && Array.isArray(obj2)) {
-    const maxLength = Math.max(obj1.length, obj2.length)
+    const array1 = obj1 as unknown[]
+    const array2 = obj2 as unknown[]
+    const maxLength = Math.max(array1.length, array2.length)
 
     for (let i = 0; i < maxLength; i++) {
       const currentPath = path ? `${path}[${i}]` : `[${i}]`
 
-      if (i >= obj1.length) {
+      if (i >= array1.length) {
         differences.push({
           path: currentPath,
           type: 'added',
-          newValue: obj2[i],
-          newType: getType(obj2[i]),
+          newValue: array2[i],
+          newType: getType(array2[i]),
         })
-      } else if (i >= obj2.length) {
+      } else if (i >= array2.length) {
         differences.push({
           path: currentPath,
           type: 'removed',
-          oldValue: obj1[i],
-          oldType: getType(obj1[i]),
+          oldValue: array1[i],
+          oldType: getType(array1[i]),
         })
       } else {
-        differences.push(...findDifferences(obj1[i], obj2[i], currentPath))
+        differences.push(...findDifferences(array1[i], array2[i], currentPath))
       }
     }
 
     return differences
   }
 
-  // Handle objects
-  if (typeof obj1 === 'object' && typeof obj2 === 'object') {
-    const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)])
+  // Handle objects (exclude null and arrays)
+  if (typeof obj1 === 'object' && typeof obj2 === 'object' && obj1 !== null && obj2 !== null && !Array.isArray(obj1) && !Array.isArray(obj2)) {
+    const record1 = obj1 as Record<string, unknown>
+    const record2 = obj2 as Record<string, unknown>
+    const allKeys = Array.from(new Set([...Object.keys(record1), ...Object.keys(record2)]))
 
     for (const key of allKeys) {
       const currentPath = path ? `${path}.${key}` : key
 
-      if (!(key in obj1)) {
+      if (!(key in record1)) {
         differences.push({
           path: currentPath,
           type: 'added',
-          newValue: obj2[key],
-          newType: getType(obj2[key]),
+          newValue: record2[key],
+          newType: getType(record2[key]),
         })
-      } else if (!(key in obj2)) {
+      } else if (!(key in record2)) {
         differences.push({
           path: currentPath,
           type: 'removed',
-          oldValue: obj1[key],
-          oldType: getType(obj1[key]),
+          oldValue: record1[key],
+          oldType: getType(record1[key]),
         })
       } else {
-        differences.push(...findDifferences(obj1[key], obj2[key], currentPath))
+        differences.push(...findDifferences(record1[key], record2[key], currentPath))
       }
     }
 

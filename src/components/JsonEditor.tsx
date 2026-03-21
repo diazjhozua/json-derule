@@ -150,22 +150,6 @@ export default function JsonEditor({
             boxShadow: `0 0 0 1px ${focusColor}, 0 8px 24px ${shadowColor}`,
           }}
           position="relative"
-          _before={{
-            content: '""',
-            position: 'absolute',
-            top: '-2px',
-            left: '-2px',
-            right: '-2px',
-            bottom: '-2px',
-            background: `linear-gradient(45deg, ${focusColor}, transparent, ${focusColor})`,
-            borderRadius: 'xl',
-            opacity: 0,
-            transition: 'opacity 0.2s ease',
-            zIndex: -1,
-          }}
-          _focusWithin_before={{
-            opacity: 0.1,
-          }}
         >
           {/* Line Numbers */}
           <Box
