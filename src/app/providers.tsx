@@ -26,15 +26,73 @@ const theme = extendTheme({
       900: '#0d47a1',
     },
   },
+  styles: {
+    global: {
+      body: {
+        transitionProperty: 'background-color',
+        transitionDuration: '200ms',
+      },
+    },
+  },
   components: {
+    Button: {
+      baseStyle: {
+        fontWeight: 'medium',
+        transitionDuration: '200ms',
+      },
+      variants: {
+        solid: {
+          _hover: {
+            transform: 'translateY(-1px)',
+            boxShadow: 'md',
+          },
+          _active: {
+            transform: 'translateY(0)',
+          },
+        },
+        outline: {
+          _hover: {
+            transform: 'translateY(-1px)',
+            boxShadow: 'sm',
+          },
+          _active: {
+            transform: 'translateY(0)',
+          },
+        },
+      },
+    },
+    Card: {
+      baseStyle: {
+        container: {
+          transitionProperty: 'transform, box-shadow',
+          transitionDuration: '200ms',
+        },
+      },
+    },
     Textarea: {
       baseStyle: {
         fontFamily: 'Monaco, "Courier New", monospace',
+        transitionProperty: 'border-color, box-shadow',
+        transitionDuration: '200ms',
+      },
+      variants: {
+        outline: {
+          _focus: {
+            boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+          },
+        },
       },
     },
     Code: {
       baseStyle: {
         fontFamily: 'Monaco, "Courier New", monospace',
+      },
+    },
+    Alert: {
+      baseStyle: {
+        container: {
+          borderRadius: 'md',
+        },
       },
     },
   },
@@ -47,4 +105,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
         {children}
       </ErrorBoundary>
     </ChakraProvider>
+  )
 }
