@@ -1,0 +1,369 @@
+'use client'
+
+import {
+  Box,
+  Button,
+  VStack,
+  HStack,
+  Heading,
+  Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Card,
+  CardBody,
+  CardHeader,
+  SimpleGrid,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  Badge,
+  useToast,
+  Flex,
+  Divider,
+  Icon,
+  Switch,
+  FormControl,
+  FormLabel,
+} from '@chakra-ui/react'
+import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
+import { FiCode, FiLayers, FiHash, FiType } from 'react-icons/fi'
+import { useState, useEffect } from 'react'
+import Layout from '@/components/Layout'
+import JsonEditor from '@/components/JsonEditor'
+import { validateJson, formatValidationError } from '@/utils/jsonValidator'
+import { ValidationResult, JsonStats } from '@/types'
+
+export default function ValidatorPage() {
+  const [input, setInput] = useState('')
+  const [result, setResult] = useState<ValidationResult | null>(null)
+  const [isValidating, setIsValidating] = useState(false)
+  const [autoValidate, setAutoValidate] = useState(true)
+
+  const toast = useToast()
+
+  // Auto-validation with debounce
+  useEffect(() => {
+    if (!autoValidate || !input.trim()) {
+      setResult(null)
+      return
+    }
+
+    const timeoutId = setTimeout(() => {
+      handleValidate()
+    }, 500) // 500ms debounce
+
+    return () => clearTimeout(timeoutId)
+  }, [input, autoValidate])
+
+  const handleValidate = () => {
+    if (!input.trim()) {
+      toast({
+        title: 'No input',
+        description: 'Please enter some JSON to validate',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+      return
+    }
+
+    setIsValidating(true)
+
+    // Add small delay for better UX
+    setTimeout(() => {
+      const validationResult = validateJson(input)
+      setResult(validationResult)
+      setIsValidating(false)
+
+      if (!autoValidate) {
+        toast({
+          title: validationResult.isValid ? 'Valid JSON' : 'Invalid JSON',
+          description: validationResult.isValid
+            ? 'Your JSON is valid and properly formatted'
+            : 'Found validation errors in your JSON',
+          status: validationResult.isValid ? 'success' : 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+      }
+    }, 100)
+  }
+
+  const handleClear = () => {
+    setInput('')
+    setResult(null)
+    toast({
+      title: 'Cleared',
+      description: 'Input and results have been cleared',
+      status: 'info',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
+  return (
+    <Layout>
+      <VStack spacing={6} align="stretch">
+        <Box textAlign="center">
+          <Heading as="h1" size="xl" mb={2}>
+            JSON Validator
+          </Heading>
+          <Text color="gray.600">
+            Validate your JSON syntax and get detailed analysis with helpful suggestions
+          </Text>
+        </Box>
+
+        {/* Controls */}
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          gap={4}
+          align={{ base: 'stretch', md: 'center' }}
+          justify="space-between"
+          bg="gray.50"
+          p={4}
+          rounded="md"
+          _dark={{ bg: 'gray.800' }}
+        >
+          <FormControl display="flex" alignItems="center" maxW="200px">
+            <FormLabel fontSize="sm" mb={0}>
+              Auto-validate
+            </FormLabel>
+            <Switch
+              isChecked={autoValidate}
+              onChange={(e) => setAutoValidate(e.target.checked)}
+              colorScheme="blue"
+            />
+          </FormControl>
+
+          <HStack spacing={2}>
+            <Button
+              colorScheme="blue"
+              onClick={handleValidate}
+              isLoading={isValidating}
+              loadingText="Validating..."
+              isDisabled={!input.trim() || autoValidate}
+              size="sm"
+            >
+              Validate
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleClear}
+              isDisabled={!input}
+              size="sm"
+            >
+              Clear
+            </Button>
+          </HStack>
+        </Flex>
+
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+          {/* Input Editor */}
+          <VStack spacing={4} align="stretch">
+            <Text fontWeight="medium" fontSize="sm">
+              JSON Input
+            </Text>
+            <JsonEditor
+              value={input}
+              onChange={setInput}
+              placeholder="Paste your JSON here to validate..."
+              height="500px"
+            />
+          </VStack>
+
+          {/* Results Panel */}
+          <VStack spacing={4} align="stretch">
+            <Text fontWeight="medium" fontSize="sm">
+              Validation Results
+            </Text>
+
+            <Box
+              border="1px"
+              borderColor="gray.200"
+              rounded="md"
+              p={4}
+              minH="500px"
+              bg="gray.50"
+              _dark={{
+                borderColor: 'gray.600',
+                bg: 'gray.800',
+              }}
+            >
+              {!input.trim() ? (
+                <Box textAlign="center" py={20}>
+                  <Icon as={FiCode} boxSize={12} color="gray.400" mb={4} />
+                  <Text color="gray.500">
+                    Enter JSON in the editor to see validation results
+                  </Text>
+                </Box>
+              ) : result ? (
+                <VStack spacing={4} align="stretch">
+                  {/* Status */}
+                  <Alert
+                    status={result.isValid ? 'success' : 'error'}
+                    rounded="md"
+                  >
+                    <AlertIcon />
+                    <Box flex={1}>
+                      <AlertTitle>
+                        {result.isValid ? 'Valid JSON!' : 'Invalid JSON'}
+                      </AlertTitle>
+                      {result.isValid ? (
+                        <AlertDescription>
+                          Your JSON is syntactically correct and ready to use.
+                        </AlertDescription>
+                      ) : (
+                        <AlertDescription>
+                          {formatValidationError(result)}
+                          {result.suggestion && (
+                            <Box mt={2}>
+                              <Text fontWeight="medium" fontSize="sm">
+                                💡 Suggestion: {result.suggestion}
+                              </Text>
+                            </Box>
+                          )}
+                        </AlertDescription>
+                      )}
+                    </Box>
+                  </Alert>
+
+                  {/* JSON Statistics (only for valid JSON) */}
+                  {result.isValid && result.stats && (
+                    <Card>
+                      <CardHeader pb={2}>
+                        <HStack>
+                          <Icon as={FiLayers} color="blue.500" />
+                          <Text fontWeight="medium">JSON Analysis</Text>
+                        </HStack>
+                      </CardHeader>
+                      <CardBody pt={0}>
+                        <SimpleGrid columns={2} spacing={4}>
+                          <Stat>
+                            <StatLabel fontSize="xs">Size</StatLabel>
+                            <StatNumber fontSize="md">
+                              {result.stats.size.toLocaleString()}
+                            </StatNumber>
+                            <StatHelpText fontSize="xs">bytes</StatHelpText>
+                          </Stat>
+
+                          <Stat>
+                            <StatLabel fontSize="xs">Depth</StatLabel>
+                            <StatNumber fontSize="md">
+                              {result.stats.depth}
+                            </StatNumber>
+                            <StatHelpText fontSize="xs">levels</StatHelpText>
+                          </Stat>
+
+                          <Stat>
+                            <StatLabel fontSize="xs">Keys</StatLabel>
+                            <StatNumber fontSize="md">
+                              {result.stats.keys.toLocaleString()}
+                            </StatNumber>
+                            <StatHelpText fontSize="xs">properties</StatHelpText>
+                          </Stat>
+
+                          <Stat>
+                            <StatLabel fontSize="xs">Values</StatLabel>
+                            <StatNumber fontSize="md">
+                              {result.stats.values.toLocaleString()}
+                            </StatNumber>
+                            <StatHelpText fontSize="xs">total</StatHelpText>
+                          </Stat>
+                        </SimpleGrid>
+
+                        <Divider my={4} />
+
+                        <VStack spacing={3} align="stretch">
+                          <Text fontSize="sm" fontWeight="medium" color="gray.600">
+                            Data Types
+                          </Text>
+                          <SimpleGrid columns={2} spacing={2}>
+                            {result.stats.objects > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="blue" size="sm">Objects</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.objects}</Text>
+                              </HStack>
+                            )}
+
+                            {result.stats.arrays > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="green" size="sm">Arrays</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.arrays}</Text>
+                              </HStack>
+                            )}
+
+                            {result.stats.strings > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="purple" size="sm">Strings</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.strings}</Text>
+                              </HStack>
+                            )}
+
+                            {result.stats.numbers > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="orange" size="sm">Numbers</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.numbers}</Text>
+                              </HStack>
+                            )}
+
+                            {result.stats.booleans > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="teal" size="sm">Booleans</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.booleans}</Text>
+                              </HStack>
+                            )}
+
+                            {result.stats.nulls > 0 && (
+                              <HStack justify="space-between">
+                                <HStack>
+                                  <Badge colorScheme="gray" size="sm">Nulls</Badge>
+                                </HStack>
+                                <Text fontSize="sm">{result.stats.nulls}</Text>
+                              </HStack>
+                            )}
+                          </SimpleGrid>
+                        </VStack>
+                      </CardBody>
+                    </Card>
+                  )}
+                </VStack>
+              ) : isValidating ? (
+                <Box textAlign="center" py={20}>
+                  <Text color="gray.500">Validating JSON...</Text>
+                </Box>
+              ) : (
+                <Box textAlign="center" py={20}>
+                  <Text color="gray.500">
+                    Results will appear here after validation
+                  </Text>
+                </Box>
+              )}
+            </Box>
+          </VStack>
+        </SimpleGrid>
+
+        {/* Tips */}
+        <Box bg="green.50" p={4} rounded="md" _dark={{ bg: 'green.900' }}>
+          <Text fontSize="sm" color="green.700" _dark={{ color: 'green.200' }}>
+            <strong>💡 Tips:</strong> Turn on auto-validate for real-time feedback as you type,
+            or turn it off and use the validate button for manual checking. The validator provides
+            detailed error messages with line numbers and helpful suggestions to fix common issues.
+          </Text>
+        </Box>
+      </VStack>
+    </Layout>
+  )
+}
