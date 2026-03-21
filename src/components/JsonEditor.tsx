@@ -39,9 +39,12 @@ export default function JsonEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lineNumbersRef = useRef<HTMLDivElement>(null)
 
-  const lineNumbersBg = useColorModeValue('gray.100', 'gray.700')
+  const lineNumbersBg = useColorModeValue('gray.100', 'gray.800')
   const lineNumbersColor = useColorModeValue('gray.500', 'gray.400')
-  const borderColor = useColorModeValue('gray.200', 'gray.600')
+  const borderColor = useColorModeValue('brand.200', 'brand.700')
+  const editorBg = useColorModeValue('white', 'gray.900')
+  const focusColor = useColorModeValue('brand.400', 'brand.300')
+  const shadowColor = useColorModeValue('rgba(13, 148, 136, 0.1)', 'rgba(45, 212, 191, 0.2)')
 
   // Calculate number of lines
   const lines = value.split('\n')
@@ -126,27 +129,71 @@ export default function JsonEditor({
 
       <Box position="relative">
         <Flex
-          border="1px solid"
+          border="2px solid"
           borderColor={borderColor}
-          borderRadius="md"
+          borderRadius="xl"
           overflow="hidden"
-          bg="white"
-          _dark={{ bg: 'gray.900' }}
+          bg={editorBg}
+          boxShadow={`0 4px 12px ${shadowColor}`}
+          transition="all 0.2s ease"
+          _hover={{
+            borderColor: focusColor,
+            boxShadow: `0 8px 24px ${shadowColor}`,
+          }}
+          _focusWithin={{
+            borderColor: focusColor,
+            boxShadow: `0 0 0 1px ${focusColor}, 0 8px 24px ${shadowColor}`,
+          }}
+          position="relative"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: '-2px',
+            left: '-2px',
+            right: '-2px',
+            bottom: '-2px',
+            background: `linear-gradient(45deg, ${focusColor}, transparent, ${focusColor})`,
+            borderRadius: 'xl',
+            opacity: 0,
+            transition: 'opacity 0.2s ease',
+            zIndex: -1,
+          }}
+          _focusWithin_before={{
+            opacity: 0.1,
+          }}
         >
           {/* Line Numbers */}
           <Box
             ref={lineNumbersRef}
-            width="45px"
+            width="50px"
             bg={lineNumbersBg}
-            borderRight="1px solid"
+            borderRight="2px solid"
             borderRightColor={borderColor}
             overflow="hidden"
             fontSize="sm"
-            fontFamily="Monaco, 'Courier New', monospace"
+            fontFamily="mono"
             lineHeight="1.4"
-            py={3}
+            py={4}
             userSelect="none"
             position="relative"
+            _before={{
+              content: '"{"',
+              position: 'absolute',
+              top: 1,
+              left: 2,
+              fontSize: 'xs',
+              color: 'amber.400',
+              opacity: 0.5,
+            }}
+            _after={{
+              content: '"}"',
+              position: 'absolute',
+              bottom: 1,
+              left: 2,
+              fontSize: 'xs',
+              color: 'amber.400',
+              opacity: 0.5,
+            }}
           >
             {Array.from({ length: lineCount }, (_, i) => (
               <Text
@@ -171,7 +218,7 @@ export default function JsonEditor({
               onScroll={handleScroll}
               placeholder={placeholder}
               className="json-editor"
-              fontFamily="Monaco, 'Courier New', monospace"
+              fontFamily="mono"
               fontSize="sm"
               height={height}
               minHeight={minHeight}
@@ -186,30 +233,41 @@ export default function JsonEditor({
               _focus={{
                 boxShadow: 'none',
                 border: 'none',
+                outline: 'none',
+              }}
+              _hover={{
+                bg: isReadOnly ? 'gray.50' : 'transparent',
               }}
               spellCheck={false}
               whiteSpace="pre"
               overflowWrap="break-word"
               lineHeight="1.4"
-              py={3}
-              pl={3}
-              pr={10}
+              py={4}
+              pl={4}
+              pr={12}
+              color={useColorModeValue('gray.800', 'gray.100')}
+              _placeholder={{
+                color: useColorModeValue('gray.400', 'gray.500'),
+                fontStyle: 'italic',
+              }}
             />
 
             {value && (
               <Text
                 position="absolute"
-                bottom={2}
-                right={2}
+                bottom={3}
+                right={3}
                 fontSize="xs"
                 color="gray.500"
                 pointerEvents="none"
-                bg="rgba(255,255,255,0.8)"
-                px={1}
-                rounded="sm"
-                _dark={{
-                  bg: 'rgba(0,0,0,0.8)',
-                }}
+                bg={useColorModeValue('rgba(255,255,255,0.9)', 'rgba(0,0,0,0.9)')}
+                px={2}
+                py={1}
+                rounded="md"
+                fontFamily="mono"
+                border="1px solid"
+                borderColor={useColorModeValue('gray.200', 'gray.600')}
+                backdropFilter="blur(4px)"
               >
                 {value.length} chars
               </Text>
