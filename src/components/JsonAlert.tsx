@@ -138,11 +138,13 @@ export function JsonErrorAlert({
             borderRadius="md"
             borderLeft="3px solid"
             borderLeftColor="red.400"
+            w="100%"
+            maxW="none"
           >
             <Text fontSize="sm" fontWeight="medium" mb={1}>
               💡 Suggestion:
             </Text>
-            <Text fontSize="sm">{suggestion}</Text>
+            <Text fontSize="sm" lineHeight="tall">{suggestion}</Text>
           </Box>
         )}
       </Box>
