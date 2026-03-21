@@ -29,6 +29,16 @@ export default function Layout({
     'linear(to-br, gray.50, gray.100)',
     'linear(to-br, gray.900, gray.800)'
   )
+  const overlayGradient = useColorModeValue(
+    'linear(to-b, brand.50, transparent)',
+    'linear(to-b, brand.900, transparent)'
+  )
+  const containerBg = useColorModeValue('white', 'gray.800')
+  const containerShadow = useColorModeValue(
+    '0 10px 30px rgba(13, 148, 136, 0.1)',
+    '0 10px 30px rgba(0, 0, 0, 0.3)'
+  )
+  const containerBorder = useColorModeValue('brand.100', 'brand.800')
 
   return (
     <VStack spacing={0} minH="100vh" align="stretch">
@@ -46,10 +56,7 @@ export default function Layout({
           left: 0,
           right: 0,
           height: '200px',
-          bgGradient: useColorModeValue(
-            'linear(to-b, brand.50, transparent)',
-            'linear(to-b, brand.900, transparent)'
-          ),
+          bgGradient: overlayGradient,
           opacity: 0.5,
           pointerEvents: 'none',
         } : {}}
@@ -62,14 +69,11 @@ export default function Layout({
           zIndex={1}
         >
           <Box
-            bg={useColorModeValue('white', 'gray.800')}
+            bg={containerBg}
             borderRadius="2xl"
-            boxShadow={useColorModeValue(
-              '0 10px 30px rgba(13, 148, 136, 0.1)',
-              '0 10px 30px rgba(0, 0, 0, 0.3)'
-            )}
+            boxShadow={containerShadow}
             border="1px solid"
-            borderColor={useColorModeValue('brand.100', 'brand.800')}
+            borderColor={containerBorder}
             overflow="hidden"
             position="relative"
             _before={{
@@ -93,7 +97,7 @@ export default function Layout({
 }
 
 // Specialized layout variants
-export function ToolLayout({ children, title }: { children: React.ReactNode; title?: string }) {
+export function ToolLayout({ children }: { children: React.ReactNode }) {
   return (
     <Layout variant="wide" showBackground>
       {children}

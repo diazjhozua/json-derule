@@ -13,7 +13,7 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import { CopyIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { JsonEmptyState, CornerBrackets } from './JsonDecorations'
 
 interface JsonEditorProps {
@@ -46,6 +46,10 @@ export default function JsonEditor({
   const editorBg = useColorModeValue('white', 'gray.900')
   const focusColor = useColorModeValue('brand.400', 'brand.300')
   const shadowColor = useColorModeValue('rgba(13, 148, 136, 0.1)', 'rgba(45, 212, 191, 0.2)')
+  const textColor = useColorModeValue('gray.800', 'gray.100')
+  const placeholderColor = useColorModeValue('gray.400', 'gray.500')
+  const charCountBg = useColorModeValue('rgba(255,255,255,0.9)', 'rgba(0,0,0,0.9)')
+  const charCountBorder = useColorModeValue('gray.200', 'gray.600')
 
   // Calculate number of lines
   const lines = value.split('\n')
@@ -69,7 +73,7 @@ export default function JsonEditor({
         duration: 2000,
         isClosable: true,
       })
-    } catch (error) {
+    } catch {
       toast({
         title: 'Copy failed',
         description: 'Failed to copy to clipboard',
@@ -258,9 +262,9 @@ export default function JsonEditor({
               py={4}
               pl={4}
               pr={12}
-              color={useColorModeValue('gray.800', 'gray.100')}
+              color={textColor}
               _placeholder={{
-                color: useColorModeValue('gray.400', 'gray.500'),
+                color: placeholderColor,
                 fontStyle: 'italic',
               }}
             />
@@ -273,13 +277,13 @@ export default function JsonEditor({
                 fontSize="xs"
                 color="gray.500"
                 pointerEvents="none"
-                bg={useColorModeValue('rgba(255,255,255,0.9)', 'rgba(0,0,0,0.9)')}
+                bg={charCountBg}
                 px={2}
                 py={1}
                 rounded="md"
                 fontFamily="mono"
                 border="1px solid"
-                borderColor={useColorModeValue('gray.200', 'gray.600')}
+                borderColor={charCountBorder}
                 backdropFilter="blur(4px)"
               >
                 {value.length} chars

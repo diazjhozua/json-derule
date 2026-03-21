@@ -28,7 +28,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { FiCode, FiLayers } from 'react-icons/fi'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
@@ -46,21 +46,7 @@ export default function ValidatorPage() {
 
   const toast = useToast()
 
-  // Auto-validation with debounce
-  useEffect(() => {
-    if (!autoValidate || !input.trim()) {
-      setResult(null)
-      return
-    }
-
-    const timeoutId = setTimeout(() => {
-      handleValidate()
-    }, 500) // 500ms debounce
-
-    return () => clearTimeout(timeoutId)
-  }, [input, autoValidate])
-
-  const handleValidate = () => {
+  const handleValidate = useCallback(() => {
     if (!input.trim()) {
       toast({
         title: 'No input',
@@ -92,7 +78,21 @@ export default function ValidatorPage() {
         })
       }
     }, 100)
-  }
+  }, [input, toast, autoValidate])
+
+  // Auto-validation with debounce
+  useEffect(() => {
+    if (!autoValidate || !input.trim()) {
+      setResult(null)
+      return
+    }
+
+    const timeoutId = setTimeout(() => {
+      handleValidate()
+    }, 500) // 500ms debounce
+
+    return () => clearTimeout(timeoutId)
+  }, [input, autoValidate, handleValidate])
 
   const handleClear = () => {
     setInput('')

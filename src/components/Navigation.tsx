@@ -5,16 +5,11 @@ import {
   Flex,
   HStack,
   Link,
-  IconButton,
-  Button,
   useDisclosure,
   useColorModeValue,
   Stack,
-  useColorMode,
-  Text,
-  Heading,
 } from '@chakra-ui/react'
-import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LogoMark } from './Logo'
@@ -24,6 +19,13 @@ const NavLink = ({ children, href }: { children: React.ReactNode; href: string }
   const pathname = usePathname()
   const isActive = pathname === href
 
+  // Pre-compute color values to avoid conditional hooks
+  const activeBg = useColorModeValue('brand.50', 'brand.900')
+  const activeBorderColor = useColorModeValue('brand.200', 'brand.700')
+  const hoverColor = useColorModeValue('brand.600', 'brand.200')
+  const activeColor = useColorModeValue('brand.600', 'brand.300')
+  const inactiveColor = useColorModeValue('gray.600', 'gray.300')
+
   return (
     <Link
       as={NextLink}
@@ -31,18 +33,18 @@ const NavLink = ({ children, href }: { children: React.ReactNode; href: string }
       px={4}
       py={2}
       rounded="lg"
-      color={isActive ? useColorModeValue('brand.600', 'brand.300') : useColorModeValue('gray.600', 'gray.300')}
+      color={isActive ? activeColor : inactiveColor}
       fontWeight={isActive ? 'semibold' : 'medium'}
-      bg={isActive ? useColorModeValue('brand.50', 'brand.900') : 'transparent'}
+      bg={isActive ? activeBg : 'transparent'}
       border="1px solid"
-      borderColor={isActive ? useColorModeValue('brand.200', 'brand.700') : 'transparent'}
+      borderColor={isActive ? activeBorderColor : 'transparent'}
       transition="all 0.2s ease"
       position="relative"
       _hover={{
         textDecoration: 'none',
-        color: useColorModeValue('brand.600', 'brand.200'),
-        bg: useColorModeValue('brand.50', 'brand.900'),
-        borderColor: useColorModeValue('brand.200', 'brand.700'),
+        color: hoverColor,
+        bg: activeBg,
+        borderColor: activeBorderColor,
         transform: 'translateY(-1px)',
       }}
       _before={isActive ? {
@@ -64,7 +66,6 @@ const NavLink = ({ children, href }: { children: React.ReactNode; href: string }
 
 export default function Navigation() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { colorMode, toggleColorMode } = useColorMode()
 
   return (
     <Box

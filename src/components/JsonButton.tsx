@@ -263,8 +263,8 @@ export default function JsonButton({
         ...getVariantStyles(),
         ...getSizeStyles(),
       }}
-      leftIcon={leftIcon as any}
-      rightIcon={rightIcon as any}
+      leftIcon={leftIcon as React.ReactElement}
+      rightIcon={rightIcon as React.ReactElement}
     >
       <Box
         as="span"

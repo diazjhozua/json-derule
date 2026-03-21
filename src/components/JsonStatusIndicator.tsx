@@ -19,14 +19,12 @@ const statusPulse = keyframes`
 
 interface JsonStatusIndicatorProps {
   status: 'valid' | 'invalid' | 'processing' | 'empty'
-  size?: number
   lines?: number
   animate?: boolean
 }
 
 export default function JsonStatusIndicator({
   status,
-  size = 100,
   lines = 0,
   animate = true,
 }: JsonStatusIndicatorProps) {

@@ -6,8 +6,6 @@ import {
   VStack,
   HStack,
   useColorModeValue,
-  keyframes,
-  Flex,
 } from '@chakra-ui/react'
 import { keyframes as emotionKeyframes } from '@emotion/react'
 
@@ -96,7 +94,8 @@ export function CornerBrackets({
   size?: 'sm' | 'md' | 'lg'
   color?: string
 }) {
-  const bracketColor = color || useColorModeValue('brand.300', 'brand.500')
+  const defaultBracketColor = useColorModeValue('brand.300', 'brand.500')
+  const bracketColor = color || defaultBracketColor
   const sizes = { sm: '12px', md: '16px', lg: '20px' }
   const bracketsSize = sizes[size]
 
@@ -177,9 +176,9 @@ export function JsonEmptyState({
             {'{'}
           </Text>
           <HStack spacing={4} opacity={0.7}>
-            <Text fontSize="sm">"data"</Text>
+            <Text fontSize="sm">&quot;data&quot;</Text>
             <Text color="purple.400">:</Text>
-            <Text fontSize="sm" color="gray.400">"..."</Text>
+            <Text fontSize="sm" color="gray.400">&quot;...&quot;</Text>
           </HStack>
           <Text
             animation={showAnimation ? `${bracketPulse} 2s ease-in-out infinite 0.5s` : undefined}
@@ -206,46 +205,10 @@ export function JsonSyntax({
   json,
   compact = false,
 }: {
-  json: any
+  json: unknown
   compact?: boolean
 }) {
-  const keyColor = useColorModeValue('purple.600', 'purple.300')
-  const stringColor = useColorModeValue('green.600', 'green.300')
-  const numberColor = useColorModeValue('amber.600', 'amber.300')
   const bracketColor = useColorModeValue('gray.600', 'gray.400')
-
-  const formatValue = (value: any, key?: string): JSX.Element => {
-    if (typeof value === 'string') {
-      return (
-        <Text as="span" color={stringColor}>
-          "{value}"
-        </Text>
-      )
-    }
-    if (typeof value === 'number') {
-      return (
-        <Text as="span" color={numberColor}>
-          {value}
-        </Text>
-      )
-    }
-    if (typeof value === 'boolean') {
-      return (
-        <Text as="span" color={numberColor}>
-          {value.toString()}
-        </Text>
-      )
-    }
-    if (value === null) {
-      return (
-        <Text as="span" color="gray.500">
-          null
-        </Text>
-      )
-    }
-    return <Text as="span">{JSON.stringify(value)}</Text>
-  }
-
   const jsonString = compact ? JSON.stringify(json) : JSON.stringify(json, null, 2)
 
   return (

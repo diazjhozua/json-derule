@@ -22,7 +22,7 @@ export function useDebounce<T>(value: T, delay: number): T {
 /**
  * Custom hook for debounced callbacks
  */
-export function useDebounceCallback<T extends (...args: any[]) => any>(
+export function useDebounceCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): T {
@@ -55,7 +55,7 @@ export function useDebounceCallback<T extends (...args: any[]) => any>(
 /**
  * Custom hook for throttling callbacks
  */
-export function useThrottle<T extends (...args: any[]) => any>(
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): T {
@@ -131,7 +131,7 @@ export const Performance = {
         if (process.env.NODE_ENV === 'development' && entry) {
           console.log(`⏱️ ${name}: ${entry.duration.toFixed(2)}ms`)
         }
-      } catch (error) {
+      } catch {
         // Ignore if marks don't exist
       }
     }

@@ -68,7 +68,7 @@ export default function JsonThemeToggle() {
         opacity="0.6"
         zIndex="2"
       >
-        "theme":
+        &quot;theme&quot;:
       </Box>
 
       {/* Values Container */}

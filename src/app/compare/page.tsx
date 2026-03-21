@@ -33,7 +33,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { FiGitBranch, FiPlus, FiMinus, FiEdit, FiRefreshCw } from 'react-icons/fi'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
@@ -53,24 +53,7 @@ export default function ComparePage() {
 
   const toast = useToast()
 
-  // Auto-comparison with debounce
-  useEffect(() => {
-    if (!autoCompare || !json1.trim() || !json2.trim()) {
-      if (autoCompare) {
-        setResult(null)
-        setError(null)
-      }
-      return
-    }
-
-    const timeoutId = setTimeout(() => {
-      handleCompare()
-    }, 800) // 800ms debounce for comparison (longer due to complexity)
-
-    return () => clearTimeout(timeoutId)
-  }, [json1, json2, autoCompare])
-
-  const handleCompare = () => {
+  const handleCompare = useCallback(() => {
     if (!json1.trim() || !json2.trim()) {
       toast({
         title: 'Missing input',
@@ -111,7 +94,24 @@ export default function ComparePage() {
 
       setIsComparing(false)
     }, 200)
-  }
+  }, [json1, json2, toast, autoCompare])
+
+  // Auto-comparison with debounce
+  useEffect(() => {
+    if (!autoCompare || !json1.trim() || !json2.trim()) {
+      if (autoCompare) {
+        setResult(null)
+        setError(null)
+      }
+      return
+    }
+
+    const timeoutId = setTimeout(() => {
+      handleCompare()
+    }, 800) // 800ms debounce for comparison (longer due to complexity)
+
+    return () => clearTimeout(timeoutId)
+  }, [json1, json2, autoCompare, handleCompare])
 
   const handleClear = () => {
     setJson1('')

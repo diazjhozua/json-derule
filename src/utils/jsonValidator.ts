@@ -4,7 +4,7 @@ export interface ValidationResult {
   errorLine?: number
   errorColumn?: number
   suggestion?: string
-  data?: any
+  data?: unknown
   stats?: JsonStats
 }
 
@@ -100,7 +100,7 @@ function parseJsonError(error: Error, input: string): ValidationResult {
 /**
  * Analyzes JSON structure and provides statistics
  */
-function getJsonStats(data: any): JsonStats {
+function getJsonStats(data: unknown): JsonStats {
   const stats: JsonStats = {
     size: JSON.stringify(data).length,
     depth: 0,
@@ -114,7 +114,7 @@ function getJsonStats(data: any): JsonStats {
     nulls: 0,
   }
 
-  function analyze(obj: any, currentDepth = 0): void {
+  function analyze(obj: unknown, currentDepth = 0): void {
     stats.depth = Math.max(stats.depth, currentDepth)
 
     if (obj === null) {

@@ -4,14 +4,12 @@ import {
   Box,
   Button,
   VStack,
-  Heading,
   Text,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
   Code,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { Component, ReactNode } from 'react'
 
@@ -23,7 +21,7 @@ interface Props {
 interface State {
   hasError: boolean
   error: Error | null
-  errorInfo: any
+  errorInfo: React.ErrorInfo | null
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
@@ -40,7 +38,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     }
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo)
     this.setState({
       error,
@@ -133,7 +131,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 }
 
 // Simple error boundary hook for function components
-export function withErrorBoundary<T extends Record<string, any>>(
+export function withErrorBoundary<T extends Record<string, unknown>>(
   Component: React.ComponentType<T>,
   fallback?: ReactNode
 ) {

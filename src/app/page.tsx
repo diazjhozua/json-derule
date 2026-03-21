@@ -38,6 +38,7 @@ export default function Home() {
   const [lastOperation, setLastOperation] = useState<'format' | 'minify' | null>(null)
 
   const toast = useToast()
+  const statusTextColor = useColorModeValue('gray.500', 'gray.400')
 
   const handleFormat = () => {
     if (!input.trim()) {
@@ -203,7 +204,7 @@ export default function Home() {
 
             {input && (
               <VStack spacing={1} align="start">
-                <Text fontSize="xs" color={useColorModeValue('gray.500', 'gray.400')}>
+                <Text fontSize="xs" color={statusTextColor}>
                   Input Status
                 </Text>
                 <Badge

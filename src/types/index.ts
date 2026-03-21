@@ -18,7 +18,7 @@ export interface ValidationResult {
   errorLine?: number;
   errorColumn?: number;
   suggestion?: string;
-  data?: any;
+  data?: unknown;
   stats?: JsonStats;
 }
 
@@ -45,8 +45,8 @@ export interface ComparisonResult {
 export interface Difference {
   path: string;
   type: 'added' | 'removed' | 'modified' | 'type-changed';
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: unknown;
+  newValue?: unknown;
   oldType?: string;
   newType?: string;
 }

@@ -7,8 +7,8 @@ export interface ComparisonResult {
 export interface Difference {
   path: string
   type: 'added' | 'removed' | 'modified' | 'type-changed'
-  oldValue?: any
-  newValue?: any
+  oldValue?: unknown
+  newValue?: unknown
   oldType?: string
   newType?: string
 }
@@ -45,7 +45,7 @@ export function compareJson(json1: string, json2: string): ComparisonResult {
 /**
  * Recursively finds differences between two objects
  */
-function findDifferences(obj1: any, obj2: any, path: string): Difference[] {
+function findDifferences(obj1: unknown, obj2: unknown, path: string): Difference[] {
   const differences: Difference[] = []
 
   // Handle null/undefined cases
@@ -161,7 +161,7 @@ function findDifferences(obj1: any, obj2: any, path: string): Difference[] {
 /**
  * Gets the type of a value for comparison
  */
-function getType(value: any): string {
+function getType(value: unknown): string {
   if (value === null) return 'null'
   if (Array.isArray(value)) return 'array'
   return typeof value
@@ -202,7 +202,7 @@ function createSummary(differences: Difference[]): ComparisonSummary {
 /**
  * Formats a value for display in comparison
  */
-export function formatValueForDisplay(value: any): string {
+export function formatValueForDisplay(value: unknown): string {
   if (value === null) return 'null'
   if (value === undefined) return 'undefined'
   if (typeof value === 'string') return `"${value}"`

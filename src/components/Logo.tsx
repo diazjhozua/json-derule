@@ -47,13 +47,12 @@ export default function Logo({
 
   const { text, bracket, spacing } = sizeMap[size]
 
-  const brandGradient = useColorModeValue(
-    'linear(to-r, teal.600, emerald.500)',
-    'linear(to-r, teal.300, emerald.300)'
-  )
 
   const bracketColor = useColorModeValue('amber.500', 'amber.300')
   const subtextColor = useColorModeValue('gray.600', 'gray.400')
+  const titleColor = useColorModeValue('gray.800', 'white')
+  const decorativeOpacity = useColorModeValue(0.6, 0.8)
+  const decorativeTextColor = useColorModeValue('gray.600', 'gray.300')
 
   return (
     <Box textAlign="center">
@@ -80,7 +79,7 @@ export default function Logo({
             as="h1"
             fontSize={text}
             fontWeight="bold"
-            color={useColorModeValue('gray.800', 'white')}
+            color={titleColor}
             letterSpacing="tight"
             animation={animate ? `${pulseGlow} 3s ease-in-out infinite` : undefined}
           >
@@ -124,17 +123,17 @@ export default function Logo({
         <HStack
           justify="center"
           mt={2}
-          opacity={useColorModeValue(0.6, 0.8)}
+          opacity={decorativeOpacity}
           fontSize="xs"
           fontFamily="Monaco, 'Courier New', monospace"
-          color={useColorModeValue('gray.600', 'gray.300')}
+          color={decorativeTextColor}
           w="100%"
         >
-          <Text>"format"</Text>
+          <Text>&quot;format&quot;</Text>
           <Text color={bracketColor}>:</Text>
-          <Text>"validate"</Text>
+          <Text>&quot;validate&quot;</Text>
           <Text color={bracketColor}>:</Text>
-          <Text>"compare"</Text>
+          <Text>&quot;compare&quot;</Text>
         </HStack>
       )}
     </Box>
