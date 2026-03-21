@@ -2,172 +2,316 @@
 
 import {
   Box,
-  Container,
+  Button,
+  HStack,
+  VStack,
   Heading,
   Text,
   SimpleGrid,
-  Card,
-  CardBody,
-  CardHeader,
-  Button,
-  Icon,
-  Stack,
-  useColorModeValue,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  useToast,
+  Badge,
+  Flex,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
-import { FiCode, FiCheckCircle, FiGitBranch } from 'react-icons/fi'
-import Link from 'next/link'
+import { useState } from 'react'
+import Layout from '@/components/Layout'
+import JsonEditor from '@/components/JsonEditor'
+import { formatJson, minifyJson, getJsonSize, isValidJson } from '@/utils/jsonFormatter'
+import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
+import { FormatResult } from '@/types'
 
 export default function Home() {
-  const cardBg = useColorModeValue('white', 'gray.800')
-  const cardBorder = useColorModeValue('gray.200', 'gray.600')
+  const [input, setInput] = useState('')
+  const [output, setOutput] = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [indent, setIndent] = useState(2)
+  const [lastOperation, setLastOperation] = useState<'format' | 'minify' | null>(null)
+
+  const toast = useToast()
+
+  const handleFormat = () => {
+    if (!input.trim()) {
+      toast({
+        title: 'No input',
+        description: 'Please enter some JSON to format',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+      return
+    }
+
+    setIsProcessing(true)
+    setError(null)
+
+    // Add small delay to show processing state for better UX
+    setTimeout(() => {
+      const result: FormatResult = formatJson(input, indent)
+
+      if (result.success && result.result) {
+        setOutput(result.result)
+        setLastOperation('format')
+        toast({
+          title: 'JSON Formatted',
+          description: 'JSON has been formatted successfully',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        })
+      } else {
+        setError(result.error || 'Unknown error occurred')
+        setOutput('')
+        setLastOperation(null)
+      }
+
+      setIsProcessing(false)
+    }, 100)
+  }
+
+  const handleMinify = () => {
+    if (!input.trim()) {
+      toast({
+        title: 'No input',
+        description: 'Please enter some JSON to minify',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+      return
+    }
+
+    setIsProcessing(true)
+    setError(null)
+
+    setTimeout(() => {
+      const result: FormatResult = minifyJson(input)
+
+      if (result.success && result.result) {
+        setOutput(result.result)
+        setLastOperation('minify')
+        toast({
+          title: 'JSON Minified',
+          description: 'JSON has been minified successfully',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        })
+      } else {
+        setError(result.error || 'Unknown error occurred')
+        setOutput('')
+        setLastOperation(null)
+      }
+
+      setIsProcessing(false)
+    }, 100)
+  }
+
+  const handleClear = () => {
+    setInput('')
+    setOutput('')
+    setError(null)
+    setLastOperation(null)
+    toast({
+      title: 'Cleared',
+      description: 'All content has been cleared',
+      status: 'info',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    createShortcuts.format(handleFormat),
+    createShortcuts.minify(handleMinify),
+    createShortcuts.clear(handleClear),
+  ])
+
+  const inputSize = input ? getJsonSize(input) : null
+  const outputSize = output ? getJsonSize(output) : null
+  const isValidInput = input ? isValidJson(input) : false
 
   return (
-    <Container maxW="6xl" py={12}>
-      <Stack spacing={8} textAlign="center" mb={12}>
-        <Heading
-          as="h1"
-          size="2xl"
-          bgGradient="linear(to-r, blue.400, purple.500)"
-          bgClip="text"
-          fontWeight="bold"
-        >
-          JSON DERULE
-        </Heading>
-        <Text fontSize="xl" color="gray.600" maxW="2xl" mx="auto">
-          A powerful suite of JSON manipulation tools for developers. Format, validate, and compare JSON with ease.
-        </Text>
-      </Stack>
+    <Layout>
+      <VStack spacing={6} align="stretch">
+        <Box textAlign="center">
+          <Heading as="h1" size="xl" mb={2}>
+            JSON DERULE
+          </Heading>
+          <Text color="gray.600">
+            Format and beautify your JSON or minify it for production
+          </Text>
+        </Box>
 
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-        <Card
-          bg={cardBg}
-          border="1px"
-          borderColor={cardBorder}
-          shadow="lg"
-          transition="transform 0.2s, box-shadow 0.2s"
-          _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
-          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
-          role="group"
-          tabIndex={0}
+        {/* Controls */}
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          gap={4}
+          align={{ base: 'stretch', md: 'center' }}
+          justify="space-between"
+          bg="gray.50"
+          p={4}
+          rounded="md"
+          _dark={{ bg: 'gray.800' }}
         >
-          <CardHeader textAlign="center">
-            <Box
-              w={16}
-              h={16}
-              mx="auto"
-              mb={4}
-              bg="blue.500"
-              rounded="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Icon as={FiCode} color="white" boxSize={8} />
-            </Box>
-            <Heading size="md">JSON Formatter</Heading>
-          </CardHeader>
-          <CardBody textAlign="center">
-            <Text color="gray.600" mb={6}>
-              Format and beautify your JSON or minify it for production. Clean up messy JSON instantly.
-            </Text>
-            <Link href="/formatter" passHref>
-              <Button
-                colorScheme="blue"
-                width="full"
-                aria-label="Go to JSON Formatter tool to format and minify JSON"
+          <HStack spacing={4} flex={1}>
+            <FormControl maxW="150px">
+              <FormLabel fontSize="sm" mb={1}>
+                Indentation
+              </FormLabel>
+              <NumberInput
+                value={indent}
+                onChange={(_, value) => setIndent(value || 2)}
+                min={1}
+                max={8}
+                size="sm"
               >
-                Format JSON
-              </Button>
-            </Link>
-          </CardBody>
-        </Card>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
 
-        <Card
-          bg={cardBg}
-          border="1px"
-          borderColor={cardBorder}
-          shadow="lg"
-          transition="transform 0.2s, box-shadow 0.2s"
-          _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
-          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
-          role="group"
-          tabIndex={0}
-        >
-          <CardHeader textAlign="center">
-            <Box
-              w={16}
-              h={16}
-              mx="auto"
-              mb={4}
-              bg="green.500"
-              rounded="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Icon as={FiCheckCircle} color="white" boxSize={8} />
-            </Box>
-            <Heading size="md">JSON Validator</Heading>
-          </CardHeader>
-          <CardBody textAlign="center">
-            <Text color="gray.600" mb={6}>
-              Validate your JSON syntax and get detailed error messages with line numbers for debugging.
-            </Text>
-            <Link href="/validator" passHref>
-              <Button
-                colorScheme="green"
-                width="full"
-                aria-label="Go to JSON Validator tool to validate JSON syntax and get detailed error reports"
-              >
-                Validate JSON
-              </Button>
-            </Link>
-          </CardBody>
-        </Card>
+            {input && (
+              <VStack spacing={1} align="start">
+                <Text fontSize="xs" color="gray.500">
+                  Input Status
+                </Text>
+                <Badge
+                  colorScheme={isValidInput ? 'green' : 'red'}
+                  size="sm"
+                >
+                  {isValidInput ? 'Valid JSON' : 'Invalid JSON'}
+                </Badge>
+              </VStack>
+            )}
+          </HStack>
 
-        <Card
-          bg={cardBg}
-          border="1px"
-          borderColor={cardBorder}
-          shadow="lg"
-          transition="transform 0.2s, box-shadow 0.2s"
-          _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
-          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
-          role="group"
-          tabIndex={0}
-        >
-          <CardHeader textAlign="center">
-            <Box
-              w={16}
-              h={16}
-              mx="auto"
-              mb={4}
-              bg="purple.500"
-              rounded="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+          <HStack spacing={2}>
+            <Button
+              colorScheme="blue"
+              onClick={handleFormat}
+              isLoading={isProcessing && lastOperation !== 'minify'}
+              loadingText="Formatting..."
+              isDisabled={!input.trim()}
+              size="sm"
             >
-              <Icon as={FiGitBranch} color="white" boxSize={8} />
+              Format
+            </Button>
+            <Button
+              colorScheme="green"
+              variant="outline"
+              onClick={handleMinify}
+              isLoading={isProcessing && lastOperation !== 'format'}
+              loadingText="Minifying..."
+              isDisabled={!input.trim()}
+              size="sm"
+            >
+              Minify
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={handleClear}
+              isDisabled={!input && !output}
+              size="sm"
+            >
+              Clear All
+            </Button>
+          </HStack>
+        </Flex>
+
+        {/* Error Display */}
+        {error && (
+          <Alert status="error" rounded="md">
+            <AlertIcon />
+            <Box>
+              <AlertTitle>Invalid JSON!</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
             </Box>
-            <Heading size="md">JSON Compare</Heading>
-          </CardHeader>
-          <CardBody textAlign="center">
-            <Text color="gray.600" mb={6}>
-              Compare two JSON objects and visualize the differences with detailed change tracking.
-            </Text>
-            <Link href="/compare" passHref>
-              <Button
-                colorScheme="purple"
-                width="full"
-                aria-label="Go to JSON Compare tool to compare two JSON objects and visualize differences"
-              >
-                Compare JSON
-              </Button>
-            </Link>
-          </CardBody>
-        </Card>
-      </SimpleGrid>
-    </Container>
+          </Alert>
+        )}
+
+        {/* Editors */}
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+          {/* Input Editor */}
+          <VStack spacing={3} align="stretch">
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium" fontSize="sm">
+                Input JSON
+              </Text>
+              {inputSize && (
+                <Text fontSize="xs" color="gray.500">
+                  {inputSize.readable}
+                </Text>
+              )}
+            </Flex>
+            <JsonEditor
+              value={input}
+              onChange={setInput}
+              placeholder="Paste your JSON here to format or minify..."
+              height="500px"
+            />
+          </VStack>
+
+          {/* Output Editor */}
+          <VStack spacing={3} align="stretch">
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium" fontSize="sm">
+                Formatted Output
+                {lastOperation && (
+                  <Badge ml={2} colorScheme="blue" size="sm">
+                    {lastOperation === 'format' ? 'Formatted' : 'Minified'}
+                  </Badge>
+                )}
+              </Text>
+              {outputSize && (
+                <Text fontSize="xs" color="gray.500">
+                  {outputSize.readable}
+                  {inputSize && (
+                    <span>
+                      {' • '}
+                      {lastOperation === 'minify'
+                        ? `${Math.round((1 - outputSize.bytes / inputSize.bytes) * 100)}% smaller`
+                        : `${Math.round((outputSize.bytes / inputSize.bytes - 1) * 100)}% larger`
+                      }
+                    </span>
+                  )}
+                </Text>
+              )}
+            </Flex>
+            <JsonEditor
+              value={output}
+              onChange={() => {}} // Read-only
+              placeholder="Formatted JSON will appear here..."
+              isReadOnly
+              height="500px"
+            />
+          </VStack>
+        </SimpleGrid>
+
+        {/* Tips */}
+        <Box bg="blue.50" p={4} rounded="md" _dark={{ bg: 'blue.900' }}>
+          <Text fontSize="sm" color="blue.700" _dark={{ color: 'blue.200' }}>
+            <strong>💡 Tips:</strong> Paste any JSON to format it with proper indentation, or minify it to remove all whitespace.
+            You can adjust the indentation level using the controls above.
+            <br />
+            <strong>⌨️ Shortcuts:</strong> Ctrl+F to format, Ctrl+M to minify, Ctrl+K to clear all.
+          </Text>
+        </Box>
+      </VStack>
+    </Layout>
   )
 }

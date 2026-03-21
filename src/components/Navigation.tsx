@@ -55,7 +55,7 @@ export default function Navigation() {
             </Heading>
           </Link>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
-            <NavLink href="/formatter">Formatter</NavLink>
+            <NavLink href="/">Formatter</NavLink>
             <NavLink href="/validator">Validator</NavLink>
             <NavLink href="/compare">Compare</NavLink>
           </HStack>
@@ -78,7 +78,7 @@ export default function Navigation() {
       {isOpen ? (
         <Box pb={4} display={{ md: 'none' }}>
           <Stack as="nav" spacing={4}>
-            <NavLink href="/formatter">Formatter</NavLink>
+            <NavLink href="/">Formatter</NavLink>
             <NavLink href="/validator">Validator</NavLink>
             <NavLink href="/compare">Compare</NavLink>
           </Stack>
