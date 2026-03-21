@@ -27,6 +27,7 @@ import { useState } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import { formatJson, minifyJson, getJsonSize, isValidJson } from '@/utils/jsonFormatter'
+import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { FormatResult } from '@/types'
 
 export default function FormatterPage() {
@@ -129,6 +130,13 @@ export default function FormatterPage() {
       isClosable: true,
     })
   }
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    createShortcuts.format(handleFormat),
+    createShortcuts.minify(handleMinify),
+    createShortcuts.clear(handleClear),
+  ])
 
   const inputSize = input ? getJsonSize(input) : null
   const outputSize = output ? getJsonSize(output) : null
@@ -299,6 +307,8 @@ export default function FormatterPage() {
           <Text fontSize="sm" color="blue.700" _dark={{ color: 'blue.200' }}>
             <strong>💡 Tips:</strong> Paste any JSON to format it with proper indentation, or minify it to remove all whitespace.
             You can adjust the indentation level using the controls above.
+            <br />
+            <strong>⌨️ Shortcuts:</strong> Ctrl+F to format, Ctrl+M to minify, Ctrl+K to clear all.
           </Text>
         </Box>
       </VStack>

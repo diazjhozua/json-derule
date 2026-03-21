@@ -34,6 +34,7 @@ import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import { validateJson, formatValidationError } from '@/utils/jsonValidator'
+import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ValidationResult, JsonStats } from '@/types'
 
 export default function ValidatorPage() {
@@ -103,6 +104,12 @@ export default function ValidatorPage() {
       isClosable: true,
     })
   }
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    createShortcuts.validate(() => !autoValidate && handleValidate()),
+    createShortcuts.clear(handleClear),
+  ])
 
   return (
     <Layout>
@@ -361,6 +368,8 @@ export default function ValidatorPage() {
             <strong>💡 Tips:</strong> Turn on auto-validate for real-time feedback as you type,
             or turn it off and use the validate button for manual checking. The validator provides
             detailed error messages with line numbers and helpful suggestions to fix common issues.
+            <br />
+            <strong>⌨️ Shortcuts:</strong> Ctrl+V to validate (when auto-validate is off), Ctrl+K to clear.
           </Text>
         </Box>
       </VStack>

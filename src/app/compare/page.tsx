@@ -41,6 +41,7 @@ import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import { compareJson, formatValueForDisplay, getDifferenceColor } from '@/utils/jsonComparison'
+import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ComparisonResult, Difference } from '@/types'
 
 export default function ComparePage() {
@@ -138,6 +139,18 @@ export default function ComparePage() {
       isClosable: true,
     })
   }
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    createShortcuts.compare(() => !autoCompare && handleCompare()),
+    createShortcuts.clear(handleClear),
+    {
+      key: 's',
+      ctrlKey: true,
+      action: handleSwap,
+      description: 'Swap inputs (Ctrl+S)',
+    },
+  ])
 
   const getDifferenceIcon = (type: Difference['type']) => {
     switch (type) {
@@ -489,6 +502,8 @@ export default function ComparePage() {
             <strong>💡 Tips:</strong> Use auto-compare for real-time diff as you type,
             or turn it off for manual comparison. Click on any difference to see detailed
             before/after values. Use the Swap button to quickly switch the left and right inputs.
+            <br />
+            <strong>⌨️ Shortcuts:</strong> Ctrl+R to compare (when auto-compare is off), Ctrl+S to swap inputs, Ctrl+K to clear all.
           </Text>
         </Box>
       </VStack>
