@@ -40,6 +40,7 @@ import { FiGitCompare, FiPlus, FiMinus, FiEdit, FiRefreshCw } from 'react-icons/
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
+import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { compareJson, formatValueForDisplay, getDifferenceColor } from '@/utils/jsonComparison'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
@@ -176,10 +177,8 @@ export default function ComparePage() {
 
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
-          <Heading as="h1" size="xl" mb={2}>
-            JSON Compare
-          </Heading>
-          <Text color="gray.600">
+          <Logo size="lg" showSubtext={true} animate={true} subtext="Compare" />
+          <Text color="gray.600" mt={4}>
             Compare two JSON objects and visualize the differences with detailed change tracking
           </Text>
         </Box>

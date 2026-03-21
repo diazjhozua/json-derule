@@ -77,9 +77,15 @@ export default function Navigation() {
       zIndex={10}
       backdropFilter="blur(8px)"
     >
-      <Flex h={18} alignItems="center" justifyContent="space-between">
+      <Flex h={16} alignItems="center" justifyContent="space-between">
         <HStack spacing={8} alignItems="center">
-          <Link as={NextLink} href="/" _hover={{ textDecoration: 'none' }}>
+          <Link
+            as={NextLink}
+            href="/"
+            _hover={{ textDecoration: 'none' }}
+            color="inherit"
+            _focus={{ color: 'inherit' }}
+          >
             <LogoMark size="sm" />
           </Link>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>

@@ -33,6 +33,7 @@ import { FiCode, FiLayers, FiHash, FiType } from 'react-icons/fi'
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
+import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { validateJson, formatValidationError } from '@/utils/jsonValidator'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
@@ -119,10 +120,8 @@ export default function ValidatorPage() {
 
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
-          <Heading as="h1" size="xl" mb={2}>
-            JSON Validator
-          </Heading>
-          <Text color="gray.600">
+          <Logo size="lg" showSubtext={true} animate={true} subtext="Validator" />
+          <Text color="gray.600" mt={4}>
             Validate your JSON syntax and get detailed analysis with helpful suggestions
           </Text>
         </Box>

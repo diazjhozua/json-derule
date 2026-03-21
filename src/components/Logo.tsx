@@ -13,6 +13,7 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg'
   showSubtext?: boolean
   animate?: boolean
+  subtext?: string
 }
 
 const pulseGlow = keyframes`
@@ -35,7 +36,8 @@ const bracketSlide = keyframes`
 export default function Logo({
   size = 'md',
   showSubtext = false,
-  animate = false
+  animate = false,
+  subtext = 'JSON Tools'
 }: LogoProps) {
   const sizeMap = {
     sm: { text: 'lg', bracket: 'xl', spacing: 2 },
@@ -54,8 +56,8 @@ export default function Logo({
   const subtextColor = useColorModeValue('gray.600', 'gray.400')
 
   return (
-    <Box>
-      <HStack spacing={spacing} align="center">
+    <Box textAlign="center">
+      <HStack spacing={spacing} align="center" justify="center">
         {/* Opening Bracket */}
         <Text
           fontSize={bracket}
@@ -78,8 +80,7 @@ export default function Logo({
             as="h1"
             fontSize={text}
             fontWeight="bold"
-            bgGradient={brandGradient}
-            bgClip="text"
+            color={useColorModeValue('gray.800', 'white')}
             letterSpacing="tight"
             animation={animate ? `${pulseGlow} 3s ease-in-out infinite` : undefined}
           >
@@ -96,7 +97,7 @@ export default function Logo({
               letterSpacing="wider"
               textTransform="uppercase"
             >
-              JSON Tools
+              {subtext}
             </Text>
           )}
         </Box>
@@ -127,6 +128,7 @@ export default function Logo({
           fontSize="xs"
           fontFamily="Monaco, 'Courier New', monospace"
           color={subtextColor}
+          w="100%"
         >
           <Text>"format"</Text>
           <Text color={bracketColor}>:</Text>
@@ -141,32 +143,36 @@ export default function Logo({
 
 // Simplified logo for navigation
 export function LogoMark({ size = 'sm' }: Pick<LogoProps, 'size'>) {
-  const bracketColor = useColorModeValue('amber.500', 'amber.300')
-  const brandColor = useColorModeValue('teal.600', 'teal.300')
+  const bracketColor = useColorModeValue('amber.500', 'amber.400')
 
   return (
-    <HStack spacing={1} align="center">
+    <HStack spacing={1} align="center" height="40px">
       <Text
-        fontSize={size === 'sm' ? 'lg' : 'xl'}
+        fontSize={size === 'sm' ? 'md' : 'lg'}
         fontWeight="bold"
         color={bracketColor}
-        fontFamily="Monaco, 'Courier New', monospace"
+        fontFamily="mono"
+        lineHeight="1"
       >
         {'{'}
       </Text>
       <Text
-        fontSize={size === 'sm' ? 'md' : 'lg'}
+        fontSize={size === 'sm' ? 'sm' : 'md'}
         fontWeight="bold"
-        color={brandColor}
+        color="#000000"
         letterSpacing="tight"
+        lineHeight="1"
+        textDecoration="none !important"
+        _dark={{ color: '#ffffff' }}
       >
-        JSON
+        JSON DERULE
       </Text>
       <Text
-        fontSize={size === 'sm' ? 'lg' : 'xl'}
+        fontSize={size === 'sm' ? 'md' : 'lg'}
         fontWeight="bold"
         color={bracketColor}
-        fontFamily="Monaco, 'Courier New', monospace"
+        fontFamily="mono"
+        lineHeight="1"
       >
         {'}'}
       </Text>

@@ -153,7 +153,7 @@ export default function Home() {
 
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
-          <Logo size="lg" showSubtext={true} animate={true} />
+          <Logo size="lg" showSubtext={true} animate={true} subtext="Formatter" />
           <Text color="gray.600" mt={4}>
             Format and beautify your JSON or minify it for production
           </Text>
