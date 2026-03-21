@@ -178,7 +178,7 @@ export default function ComparePage() {
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Logo size="lg" showSubtext={true} animate={true} subtext="Compare" />
-          <Text color="gray.600" mt={4}>
+          <Text color={useColorModeValue('gray.600', 'gray.300')} mt={4}>
             Compare two JSON objects and visualize the differences with detailed change tracking
           </Text>
         </Box>

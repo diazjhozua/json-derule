@@ -124,10 +124,10 @@ export default function Logo({
         <HStack
           justify="center"
           mt={2}
-          opacity={0.6}
+          opacity={useColorModeValue(0.6, 0.8)}
           fontSize="xs"
           fontFamily="Monaco, 'Courier New', monospace"
-          color={subtextColor}
+          color={useColorModeValue('gray.600', 'gray.300')}
           w="100%"
         >
           <Text>"format"</Text>
@@ -146,36 +146,45 @@ export function LogoMark({ size = 'sm' }: Pick<LogoProps, 'size'>) {
   const bracketColor = useColorModeValue('amber.500', 'amber.400')
 
   return (
-    <HStack spacing={1} align="center" height="40px">
-      <Text
+    <Box display="flex" alignItems="center" justifyContent="center" height="40px">
+      <Box
+        as="span"
         fontSize={size === 'sm' ? 'md' : 'lg'}
         fontWeight="bold"
         color={bracketColor}
         fontFamily="mono"
-        lineHeight="1"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
         {'{'}
-      </Text>
-      <Text
+      </Box>
+      <Box
+        as="span"
         fontSize={size === 'sm' ? 'sm' : 'md'}
         fontWeight="bold"
         color="#000000"
         letterSpacing="tight"
-        lineHeight="1"
-        textDecoration="none !important"
         _dark={{ color: '#ffffff' }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        mx={1}
       >
         JSON DERULE
-      </Text>
-      <Text
+      </Box>
+      <Box
+        as="span"
         fontSize={size === 'sm' ? 'md' : 'lg'}
         fontWeight="bold"
         color={bracketColor}
         fontFamily="mono"
-        lineHeight="1"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
         {'}'}
-      </Text>
-    </HStack>
+      </Box>
+    </Box>
   )
 }

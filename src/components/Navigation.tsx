@@ -30,7 +30,7 @@ const NavLink = ({ children, href }: { children: React.ReactNode; href: string }
       px={4}
       py={2}
       rounded="lg"
-      color={isActive ? 'brand.600' : 'gray.600'}
+      color={isActive ? useColorModeValue('brand.600', 'brand.300') : useColorModeValue('gray.600', 'gray.300')}
       fontWeight={isActive ? 'semibold' : 'medium'}
       bg={isActive ? useColorModeValue('brand.50', 'brand.900') : 'transparent'}
       border="1px solid"
@@ -39,7 +39,7 @@ const NavLink = ({ children, href }: { children: React.ReactNode; href: string }
       position="relative"
       _hover={{
         textDecoration: 'none',
-        color: 'brand.600',
+        color: useColorModeValue('brand.600', 'brand.200'),
         bg: useColorModeValue('brand.50', 'brand.900'),
         borderColor: useColorModeValue('brand.200', 'brand.700'),
         transform: 'translateY(-1px)',
@@ -85,6 +85,9 @@ export default function Navigation() {
             _hover={{ textDecoration: 'none' }}
             color="inherit"
             _focus={{ color: 'inherit' }}
+            display="inline-flex"
+            alignItems="center"
+            h="40px"
           >
             <LogoMark size="sm" />
           </Link>
@@ -95,14 +98,21 @@ export default function Navigation() {
           </HStack>
         </HStack>
 
-        <Flex alignItems="center">
-          <Button
+        <HStack spacing={3}>
+          <Box
+            as="button"
             onClick={toggleColorMode}
-            mr={3}
-            size="sm"
-            variant="ghost"
+            w="32px"
+            h="32px"
             borderRadius="lg"
             color="gray.600"
+            bg="transparent"
+            border="none"
+            cursor="pointer"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            lineHeight="1"
             _hover={{
               bg: useColorModeValue('brand.50', 'brand.900'),
               color: 'brand.600',
@@ -111,15 +121,30 @@ export default function Navigation() {
             transition="all 0.2s ease"
           >
             {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-          </Button>
-          <IconButton
-            size="md"
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label="Open Menu"
-            display={{ md: 'none' }}
+          </Box>
+          <Box
+            as="button"
+            w="32px"
+            h="32px"
+            borderRadius="lg"
+            color="gray.600"
+            bg="transparent"
+            border="none"
+            cursor="pointer"
+            display={{ base: 'flex', md: 'none' }}
+            alignItems="center"
+            justifyContent="center"
+            lineHeight="1"
             onClick={isOpen ? onClose : onOpen}
-          />
-        </Flex>
+            aria-label="Open Menu"
+            _hover={{
+              bg: useColorModeValue('brand.50', 'brand.900'),
+              color: 'brand.600',
+            }}
+          >
+            {isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          </Box>
+        </HStack>
       </Flex>
 
       {isOpen ? (

@@ -122,7 +122,7 @@ export default function ValidatorPage() {
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Logo size="lg" showSubtext={true} animate={true} subtext="Validator" />
-          <Text color="gray.600" mt={4}>
+          <Text color={useColorModeValue('gray.600', 'gray.300')} mt={4}>
             Validate your JSON syntax and get detailed analysis with helpful suggestions
           </Text>
         </Box>
