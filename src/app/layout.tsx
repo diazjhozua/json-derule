@@ -1,5 +1,5 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
@@ -21,7 +21,11 @@ export const metadata: Metadata = {
     title: 'JSON DERULE - JSON Tools',
     description: 'Professional JSON formatting, validation, and comparison tools for developers.',
   },
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: '#2196f3',
 }
 

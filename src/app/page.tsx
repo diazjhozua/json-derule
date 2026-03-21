@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Box,
   Container,
@@ -12,7 +14,7 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { FiCode, FiCheckCircle, FiGitCompare } from 'react-icons/fi'
+import { FiCode, FiCheckCircle, FiGitBranch } from 'react-icons/fi'
 import Link from 'next/link'
 
 export default function Home() {
@@ -146,7 +148,7 @@ export default function Home() {
               alignItems="center"
               justifyContent="center"
             >
-              <Icon as={FiGitCompare} color="white" boxSize={8} />
+              <Icon as={FiGitBranch} color="white" boxSize={8} />
             </Box>
             <Heading size="md">JSON Compare</Heading>
           </CardHeader>
