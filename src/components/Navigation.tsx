@@ -17,6 +17,7 @@ import {
 import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
+import { LogoMark } from './Logo'
 
 const NavLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
   const pathname = usePathname()
@@ -50,9 +51,7 @@ export default function Navigation() {
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <HStack spacing={8} alignItems="center">
           <Link as={NextLink} href="/" _hover={{ textDecoration: 'none' }}>
-            <Heading size="md" color="blue.500">
-              JSON DERULE
-            </Heading>
+            <LogoMark size="sm" />
           </Link>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             <NavLink href="/">Formatter</NavLink>

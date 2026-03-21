@@ -26,6 +26,7 @@ import {
 import { useState } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
+import Logo from '@/components/Logo'
 import { formatJson, minifyJson, getJsonSize, isValidJson } from '@/utils/jsonFormatter'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { FormatResult } from '@/types'
@@ -146,10 +147,8 @@ export default function Home() {
     <Layout>
       <VStack spacing={6} align="stretch">
         <Box textAlign="center">
-          <Heading as="h1" size="xl" mb={2}>
-            JSON DERULE
-          </Heading>
-          <Text color="gray.600">
+          <Logo size="lg" showSubtext={true} animate={true} />
+          <Text color="gray.600" mt={4}>
             Format and beautify your JSON or minify it for production
           </Text>
         </Box>
