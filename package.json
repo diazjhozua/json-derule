@@ -17,7 +17,8 @@
     "@chakra-ui/icons": "^2.1.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
-    "framer-motion": "^10.16.0"
+    "framer-motion": "^10.16.0",
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
