@@ -22,6 +22,7 @@ import {
   NumberDecrementStepper,
   FormControl,
   FormLabel,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Layout from '@/components/Layout'
@@ -154,20 +155,18 @@ export default function Home() {
         <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Logo size="lg" showSubtext={true} animate={true} subtext="Formatter" />
-          <Text color="gray.600" mt={4}>
+          <Text color={useColorModeValue('gray.600', 'gray.300')} mt={4}>
             Format and beautify your JSON or minify it for production
           </Text>
         </Box>
 
         {/* Controls */}
         <Box
-          bg="gray.50"
-          _dark={{ bg: 'gray.800' }}
+          bg={useColorModeValue('gray.50', 'gray.700')}
           p={6}
           rounded="xl"
           border="2px solid"
-          borderColor="brand.100"
-          _dark={{ borderColor: 'brand.800' }}
+          borderColor={useColorModeValue('teal.200', 'teal.600')}
           boxShadow="lg"
           position="relative"
           _before={{
@@ -177,7 +176,7 @@ export default function Home() {
             left: 6,
             width: '60px',
             height: '2px',
-            bg: 'brand.500',
+            bg: 'teal.500',
             borderRadius: '1px',
           }}
         >
@@ -209,12 +208,14 @@ export default function Home() {
 
             {input && (
               <VStack spacing={1} align="start">
-                <Text fontSize="xs" color="gray.500">
+                <Text fontSize="xs" color={useColorModeValue('gray.500', 'gray.400')}>
                   Input Status
                 </Text>
                 <Badge
                   colorScheme={isValidInput ? 'green' : 'red'}
                   size="sm"
+                  px={3}
+                  py={1}
                 >
                   {isValidInput ? 'Valid JSON' : 'Invalid JSON'}
                 </Badge>
@@ -324,13 +325,11 @@ export default function Home() {
 
         {/* Tips */}
         <Box
-          bg="brand.50"
-          _dark={{ bg: 'brand.900' }}
+          bg={useColorModeValue('teal.50', 'teal.900')}
           p={6}
           rounded="xl"
           border="2px solid"
-          borderColor="brand.200"
-          _dark={{ borderColor: 'brand.700' }}
+          borderColor={useColorModeValue('teal.200', 'teal.600')}
           position="relative"
           _before={{
             content: '"💡"',
@@ -341,12 +340,12 @@ export default function Home() {
           }}
         >
           <Box pl={8}>
-            <Text fontSize="sm" color="brand.700" _dark={{ color: 'brand.200' }} lineHeight="tall">
+            <Text fontSize="sm" color={useColorModeValue('teal.700', 'teal.200')} lineHeight="tall">
               <Text as="span" fontWeight="bold">Tips:</Text>{' '}
               Paste any JSON to format it with proper indentation, or minify it to remove all whitespace.
               You can adjust the indentation level using the controls above.
             </Text>
-            <Text fontSize="sm" color="brand.600" _dark={{ color: 'brand.300' }} mt={2} lineHeight="tall">
+            <Text fontSize="sm" color={useColorModeValue('teal.600', 'teal.300')} mt={2} lineHeight="tall">
               <Text as="span" fontWeight="bold">⌨️ Shortcuts:</Text>{' '}
               Ctrl+F to format, Ctrl+M to minify, Ctrl+K to clear all.
             </Text>

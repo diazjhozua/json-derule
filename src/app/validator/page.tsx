@@ -27,6 +27,7 @@ import {
   Switch,
   FormControl,
   FormLabel,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
 import { FiCode, FiLayers, FiHash, FiType } from 'react-icons/fi'
@@ -128,13 +129,11 @@ export default function ValidatorPage() {
 
         {/* Controls */}
         <Box
-          bg="gray.50"
-          _dark={{ bg: 'gray.800' }}
+          bg={useColorModeValue('gray.50', 'gray.700')}
           p={6}
           rounded="xl"
           border="2px solid"
-          borderColor="green.100"
-          _dark={{ borderColor: 'green.800' }}
+          borderColor={useColorModeValue('green.200', 'green.600')}
           boxShadow="lg"
           position="relative"
           _before={{
@@ -387,8 +386,14 @@ export default function ValidatorPage() {
         </SimpleGrid>
 
         {/* Tips */}
-        <Box bg="green.50" p={4} rounded="md" _dark={{ bg: 'green.900' }}>
-          <Text fontSize="sm" color="green.700" _dark={{ color: 'green.200' }}>
+        <Box
+          bg={useColorModeValue('green.50', 'green.900')}
+          p={6}
+          rounded="xl"
+          border="2px solid"
+          borderColor={useColorModeValue('green.200', 'green.600')}
+        >
+          <Text fontSize="sm" color={useColorModeValue('green.700', 'green.200')}>
             <strong>💡 Tips:</strong> Turn on auto-validate for real-time feedback as you type,
             or turn it off and use the validate button for manual checking. The validator provides
             detailed error messages with line numbers and helpful suggestions to fix common issues.

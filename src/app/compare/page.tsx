@@ -185,13 +185,11 @@ export default function ComparePage() {
 
         {/* Controls */}
         <Box
-          bg="gray.50"
-          _dark={{ bg: 'gray.800' }}
+          bg={useColorModeValue('gray.50', 'gray.700')}
           p={6}
           rounded="xl"
           border="2px solid"
-          borderColor="purple.100"
-          _dark={{ borderColor: 'purple.800' }}
+          borderColor={useColorModeValue('purple.200', 'purple.600')}
           boxShadow="lg"
           position="relative"
           _before={{
@@ -521,8 +519,14 @@ export default function ComparePage() {
         )}
 
         {/* Tips */}
-        <Box bg="purple.50" p={4} rounded="md" _dark={{ bg: 'purple.900' }}>
-          <Text fontSize="sm" color="purple.700" _dark={{ color: 'purple.200' }}>
+        <Box
+          bg={useColorModeValue('purple.50', 'purple.900')}
+          p={6}
+          rounded="xl"
+          border="2px solid"
+          borderColor={useColorModeValue('purple.200', 'purple.600')}
+        >
+          <Text fontSize="sm" color={useColorModeValue('purple.700', 'purple.200')}>
             <strong>💡 Tips:</strong> Use auto-compare for real-time diff as you type,
             or turn it off for manual comparison. Click on any difference to see detailed
             before/after values. Use the Swap button to quickly switch the left and right inputs.
