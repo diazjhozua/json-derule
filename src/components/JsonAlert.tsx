@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Alert,
@@ -9,15 +9,15 @@ import {
   Text,
   useColorModeValue,
   HStack,
-} from '@chakra-ui/react'
-import { ReactNode } from 'react'
+} from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
 interface JsonAlertProps {
-  status: 'success' | 'error' | 'warning' | 'info'
-  title: string
-  description?: string
-  children?: ReactNode
-  showBrackets?: boolean
+  status: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  description?: string;
+  children?: ReactNode;
+  showBrackets?: boolean;
 }
 
 export default function JsonAlert({
@@ -27,7 +27,7 @@ export default function JsonAlert({
   children,
   showBrackets = true,
 }: JsonAlertProps) {
-  const bracketColor = useColorModeValue('amber.500', 'amber.300')
+  const bracketColor = useColorModeValue('amber.500', 'amber.300');
 
   const statusConfig = {
     success: {
@@ -50,9 +50,9 @@ export default function JsonAlert({
       borderColor: useColorModeValue('brand.200', 'brand.700'),
       iconColor: useColorModeValue('brand.500', 'brand.300'),
     },
-  }
+  };
 
-  const config = statusConfig[status]
+  const config = statusConfig[status];
 
   return (
     <Alert
@@ -65,32 +65,42 @@ export default function JsonAlert({
       p={4}
       position="relative"
       overflow="hidden"
-      _before={showBrackets ? {
-        content: '"{"',
-        position: 'absolute',
-        top: 2,
-        left: 2,
-        fontSize: 'lg',
-        fontFamily: 'mono',
-        color: bracketColor,
-        opacity: 0.3,
-        fontWeight: 'bold',
-      } : {}}
-      _after={showBrackets ? {
-        content: '"}"',
-        position: 'absolute',
-        bottom: 2,
-        right: 2,
-        fontSize: 'lg',
-        fontFamily: 'mono',
-        color: bracketColor,
-        opacity: 0.3,
-        fontWeight: 'bold',
-      } : {}}
+      w="full"
+      alignItems="flex-start"
+      _before={
+        showBrackets
+          ? {
+              content: '"{"',
+              position: 'absolute',
+              top: 2,
+              left: 2,
+              fontSize: 'lg',
+              fontFamily: 'mono',
+              color: bracketColor,
+              opacity: 0.3,
+              fontWeight: 'bold',
+            }
+          : {}
+      }
+      _after={
+        showBrackets
+          ? {
+              content: '"}"',
+              position: 'absolute',
+              bottom: 2,
+              right: 2,
+              fontSize: 'lg',
+              fontFamily: 'mono',
+              color: bracketColor,
+              opacity: 0.3,
+              fontWeight: 'bold',
+            }
+          : {}
+      }
     >
-      <HStack align="start" spacing={3} position="relative" zIndex={1}>
-        <AlertIcon color={config.iconColor} mt={0.5} />
-        <Box flex={1}>
+      <HStack align="start" spacing={3} position="relative" zIndex={1} w="full">
+        <AlertIcon color={config.iconColor} mt={0.5} flexShrink={0} />
+        <Box flex={1} minW={0} w="full">
           <AlertTitle fontSize="md" fontWeight="semibold" mb={1}>
             {title}
           </AlertTitle>
@@ -103,7 +113,7 @@ export default function JsonAlert({
         </Box>
       </HStack>
     </Alert>
-  )
+  );
 }
 
 // Specialized JSON Error Alert
@@ -113,15 +123,20 @@ export function JsonErrorAlert({
   line,
   suggestion,
 }: {
-  title?: string
-  error: string
-  line?: number
-  suggestion?: string
+  title?: string;
+  error: string;
+  line?: number;
+  suggestion?: string;
 }) {
   return (
     <JsonAlert status="error" title={title}>
-      <Box mt={2}>
-        <Text fontSize="sm" fontFamily="mono" color="red.700" _dark={{ color: 'red.300' }}>
+      <Box mt={2} w="full" flex="1">
+        <Text
+          fontSize="sm"
+          fontFamily="mono"
+          color="red.700"
+          _dark={{ color: 'red.300' }}
+        >
           {error}
         </Text>
         {line && (
@@ -138,18 +153,21 @@ export function JsonErrorAlert({
             borderRadius="md"
             borderLeft="3px solid"
             borderLeftColor="red.400"
-            w="100%"
-            maxW="none"
+            w="full"
+            flex="1"
+            minW="0"
           >
             <Text fontSize="sm" fontWeight="medium" mb={1}>
               💡 Suggestion:
             </Text>
-            <Text fontSize="sm" lineHeight="tall">{suggestion}</Text>
+            <Text fontSize="sm" lineHeight="tall">
+              {suggestion}
+            </Text>
           </Box>
         )}
       </Box>
     </JsonAlert>
-  )
+  );
 }
 
 // Specialized JSON Success Alert
@@ -157,31 +175,46 @@ export function JsonSuccessAlert({
   title = 'Valid JSON',
   stats,
 }: {
-  title?: string
+  title?: string;
   stats?: {
-    size: number
-    keys: number
-    depth: number
-  }
+    size: number;
+    keys: number;
+    depth: number;
+  };
 }) {
   return (
     <JsonAlert status="success" title={title}>
       {stats && (
         <HStack mt={2} spacing={4} fontSize="sm">
           <Text>
-            <Text as="span" fontFamily="mono" color="green.600" _dark={{ color: 'green.300' }}>
+            <Text
+              as="span"
+              fontFamily="mono"
+              color="green.600"
+              _dark={{ color: 'green.300' }}
+            >
               {stats.size.toLocaleString()}
             </Text>{' '}
             bytes
           </Text>
           <Text>
-            <Text as="span" fontFamily="mono" color="green.600" _dark={{ color: 'green.300' }}>
+            <Text
+              as="span"
+              fontFamily="mono"
+              color="green.600"
+              _dark={{ color: 'green.300' }}
+            >
               {stats.keys}
             </Text>{' '}
             keys
           </Text>
           <Text>
-            <Text as="span" fontFamily="mono" color="green.600" _dark={{ color: 'green.300' }}>
+            <Text
+              as="span"
+              fontFamily="mono"
+              color="green.600"
+              _dark={{ color: 'green.300' }}
+            >
               {stats.depth}
             </Text>{' '}
             levels
@@ -189,5 +222,5 @@ export function JsonSuccessAlert({
         </HStack>
       )}
     </JsonAlert>
-  )
+  );
 }
