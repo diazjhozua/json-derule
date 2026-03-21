@@ -14,18 +14,20 @@ interface KeyboardShortcut {
 export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Don't trigger shortcuts when typing in inputs
-      if (
-        event.target instanceof HTMLElement &&
+      // Don't trigger custom shortcuts when typing in inputs
+      const isInInput = event.target instanceof HTMLElement &&
         (event.target.tagName === 'INPUT' ||
          event.target.tagName === 'TEXTAREA' ||
          event.target.isContentEditable)
-      ) {
-        // Only allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+Z in inputs
-        const allowedInInputs = ['a', 'c', 'v', 'z']
-        if (!event.ctrlKey || !allowedInInputs.includes(event.key.toLowerCase())) {
-          return
+
+      if (isInInput) {
+        // Allow normal browser shortcuts (Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+Z, etc.) in inputs
+        const allowedInInputs = ['a', 'c', 'v', 'z', 'x', 'y']
+        if (event.ctrlKey && allowedInInputs.includes(event.key.toLowerCase())) {
+          return // Let browser handle these shortcuts
         }
+        // Don't trigger custom shortcuts in inputs
+        return
       }
 
       for (const shortcut of shortcuts) {
