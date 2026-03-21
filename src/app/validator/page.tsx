@@ -2,10 +2,8 @@
 
 import {
   Box,
-  Button,
   VStack,
   HStack,
-  Heading,
   Text,
   Alert,
   AlertIcon,
@@ -29,8 +27,7 @@ import {
   FormLabel,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
-import { FiCode, FiLayers, FiHash, FiType } from 'react-icons/fi'
+import { FiCode, FiLayers } from 'react-icons/fi'
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
@@ -39,7 +36,7 @@ import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { ValidateButton, ClearButton } from '@/components/JsonButton'
 import { validateJson, formatValidationError } from '@/utils/jsonValidator'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
-import { ValidationResult, JsonStats } from '@/types'
+import { ValidationResult } from '@/types'
 
 export default function ValidatorPage() {
   const [input, setInput] = useState('')

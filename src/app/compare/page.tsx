@@ -2,10 +2,8 @@
 
 import {
   Box,
-  Button,
   VStack,
   HStack,
-  Heading,
   Text,
   Alert,
   AlertIcon,
@@ -21,7 +19,6 @@ import {
   Badge,
   useToast,
   Flex,
-  Divider,
   Icon,
   Switch,
   FormControl,
@@ -35,8 +32,7 @@ import {
   AccordionIcon,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
-import { FiGitCompare, FiPlus, FiMinus, FiEdit, FiRefreshCw } from 'react-icons/fi'
+import { FiGitBranch, FiPlus, FiMinus, FiEdit, FiRefreshCw } from 'react-icons/fi'
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
@@ -300,7 +296,7 @@ export default function ComparePage() {
                   <Box textAlign="center" py={8}>
                     <VStack spacing={6}>
                       <JsonLoadingDots />
-                      <Icon as={FiGitCompare} boxSize={8} color="purple.400" />
+                      <Icon as={FiGitBranch} boxSize={8} color="purple.400" />
                       <Text color="gray.500">Comparing JSON objects...</Text>
                     </VStack>
                   </Box>
@@ -332,7 +328,7 @@ export default function ComparePage() {
                   <Card bg={cardBg}>
                     <CardHeader pb={2}>
                       <HStack>
-                        <Icon as={FiGitCompare} color="purple.500" />
+                        <Icon as={FiGitBranch} color="purple.500" />
                         <Text fontWeight="medium">Change Summary</Text>
                       </HStack>
                     </CardHeader>
