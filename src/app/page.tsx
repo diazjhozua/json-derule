@@ -42,8 +42,11 @@ export default function Home() {
           border="1px"
           borderColor={cardBorder}
           shadow="lg"
-          transition="transform 0.2s"
+          transition="transform 0.2s, box-shadow 0.2s"
           _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
+          role="group"
+          tabIndex={0}
         >
           <CardHeader textAlign="center">
             <Box
@@ -66,7 +69,11 @@ export default function Home() {
               Format and beautify your JSON or minify it for production. Clean up messy JSON instantly.
             </Text>
             <Link href="/formatter" passHref>
-              <Button colorScheme="blue" width="full">
+              <Button
+                colorScheme="blue"
+                width="full"
+                aria-label="Go to JSON Formatter tool to format and minify JSON"
+              >
                 Format JSON
               </Button>
             </Link>
@@ -78,8 +85,11 @@ export default function Home() {
           border="1px"
           borderColor={cardBorder}
           shadow="lg"
-          transition="transform 0.2s"
+          transition="transform 0.2s, box-shadow 0.2s"
           _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
+          role="group"
+          tabIndex={0}
         >
           <CardHeader textAlign="center">
             <Box
@@ -102,7 +112,11 @@ export default function Home() {
               Validate your JSON syntax and get detailed error messages with line numbers for debugging.
             </Text>
             <Link href="/validator" passHref>
-              <Button colorScheme="green" width="full">
+              <Button
+                colorScheme="green"
+                width="full"
+                aria-label="Go to JSON Validator tool to validate JSON syntax and get detailed error reports"
+              >
                 Validate JSON
               </Button>
             </Link>
@@ -114,8 +128,11 @@ export default function Home() {
           border="1px"
           borderColor={cardBorder}
           shadow="lg"
-          transition="transform 0.2s"
+          transition="transform 0.2s, box-shadow 0.2s"
           _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+          _focus={{ transform: 'translateY(-4px)', shadow: 'xl', outline: '3px solid', outlineColor: 'blue.500' }}
+          role="group"
+          tabIndex={0}
         >
           <CardHeader textAlign="center">
             <Box
@@ -138,7 +155,11 @@ export default function Home() {
               Compare two JSON objects and visualize the differences with detailed change tracking.
             </Text>
             <Link href="/compare" passHref>
-              <Button colorScheme="purple" width="full">
+              <Button
+                colorScheme="purple"
+                width="full"
+                aria-label="Go to JSON Compare tool to compare two JSON objects and visualize differences"
+              >
                 Compare JSON
               </Button>
             </Link>
