@@ -1,4 +1,18 @@
-'use client'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'JSON Validator Online - Validate JSON Syntax & Structure | JSON DERULE',
+  description: 'Free online JSON validator with detailed error reporting. Validate JSON syntax, check structure, get line-by-line error messages with suggestions. Real-time validation as you type.',
+  keywords: [
+    'json validator', 'validate json online', 'json syntax checker', 'json verification',
+    'check json validity', 'json error checker', 'json validation tool', 'json parser online'
+  ],
+  openGraph: {
+    title: 'JSON Validator Online - Validate JSON with Detailed Error Reports',
+    description: 'Professional JSON validation tool with real-time error checking, detailed error messages, and helpful suggestions for fixing invalid JSON.',
+    url: 'https://jhozuad.github.io/json-derule/validator',
+  },
+}
 
 import {
   Box,

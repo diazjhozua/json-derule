@@ -1,4 +1,18 @@
-'use client'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'JSON Compare Tool - Compare JSON Objects & Arrays Online | JSON DERULE',
+  description: 'Free online JSON comparison tool with visual diff highlighting. Compare JSON objects and arrays, see differences with detailed change tracking. Perfect for debugging and data analysis.',
+  keywords: [
+    'json compare', 'json diff', 'compare json objects', 'json comparison tool',
+    'json difference checker', 'json merge tool', 'json visual diff', 'compare json online'
+  ],
+  openGraph: {
+    title: 'JSON Compare Tool - Visual Diff for JSON Objects and Arrays',
+    description: 'Advanced JSON comparison with visual diff highlighting. Track changes between JSON objects with detailed change summaries and side-by-side comparison.',
+    url: 'https://jhozuad.github.io/json-derule/compare',
+  },
+}
 
 import {
   Box,

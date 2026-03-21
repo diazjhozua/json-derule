@@ -1,4 +1,18 @@
-'use client'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'JSON Formatter Online Free - Format & Beautify JSON | JSON DERULE',
+  description: 'Free online JSON formatter and beautifier. Format JSON with custom indentation, minify for production, copy formatted output. Real-time JSON validation with detailed error messages.',
+  keywords: [
+    'json formatter', 'json beautifier', 'format json online', 'prettify json',
+    'json minifier', 'json indentation', 'format json free', 'json pretty print'
+  ],
+  openGraph: {
+    title: 'Free JSON Formatter Online - Format & Beautify JSON Code',
+    description: 'Professional JSON formatting tool. Format JSON with custom indentation, minify for production. Real-time validation and error reporting.',
+    url: 'https://jhozuad.github.io/json-derule/',
+  },
+}
 
 import {
   Box,
