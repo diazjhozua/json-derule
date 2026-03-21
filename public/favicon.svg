@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#0D9488"/>
+
+  <!-- Left curly brace -->
+  <text x="8" y="22" font-family="Monaco, monospace" font-size="16" font-weight="bold" fill="#F59E0B" text-anchor="middle">{</text>
+
+  <!-- Right curly brace -->
+  <text x="24" y="22" font-family="Monaco, monospace" font-size="16" font-weight="bold" fill="#F59E0B" text-anchor="middle">}</text>
+
+  <!-- Center dot -->
+  <circle cx="16" cy="16" r="2" fill="#F59E0B"/>
+</svg>

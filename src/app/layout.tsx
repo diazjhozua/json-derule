@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   creator: 'JSON DERULE',
   publisher: 'JSON DERULE',
   robots: 'index, follow',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: {
+      url: '/favicon.svg',
+      sizes: '180x180',
+      type: 'image/svg+xml',
+    },
+  },
   openGraph: {
     title: 'JSON DERULE - Professional JSON Tools',
     description: 'Format, validate, and compare JSON with ease. Professional-grade JSON manipulation tools for developers.',
@@ -26,7 +38,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#2196f3',
+  themeColor: '#0D9488',
 }
 
 export default function RootLayout({

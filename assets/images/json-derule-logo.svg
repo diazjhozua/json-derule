@@ -1,0 +1,21 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#0D9488" stroke="#F59E0B" stroke-width="4"/>
+
+  <!-- Left curly brace -->
+  <text x="45" y="120" font-family="Monaco, monospace" font-size="48" font-weight="bold" fill="#F59E0B" text-anchor="middle">{</text>
+
+  <!-- Right curly brace -->
+  <text x="155" y="120" font-family="Monaco, monospace" font-size="48" font-weight="bold" fill="#F59E0B" text-anchor="middle">}</text>
+
+  <!-- JSON text -->
+  <text x="100" y="115" font-family="Inter, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">JSON</text>
+
+  <!-- DERULE text -->
+  <text x="100" y="135" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#E6FFFA" text-anchor="middle">DERULE</text>
+
+  <!-- Decorative dots -->
+  <circle cx="100" cy="150" r="2" fill="#F59E0B" opacity="0.7"/>
+  <circle cx="90" cy="150" r="1.5" fill="#F59E0B" opacity="0.5"/>
+  <circle cx="110" cy="150" r="1.5" fill="#F59E0B" opacity="0.5"/>
+</svg>
