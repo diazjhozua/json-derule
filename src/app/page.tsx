@@ -144,8 +144,8 @@ export default function Home() {
   const isValidInput = input ? isValidJson(input) : false
 
   return (
-    <Layout>
-      <VStack spacing={6} align="stretch">
+    <Layout variant="wide">
+      <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Logo size="lg" showSubtext={true} animate={true} />
           <Text color="gray.600" mt={4}>
@@ -154,16 +154,33 @@ export default function Home() {
         </Box>
 
         {/* Controls */}
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          gap={4}
-          align={{ base: 'stretch', md: 'center' }}
-          justify="space-between"
+        <Box
           bg="gray.50"
-          p={4}
-          rounded="md"
           _dark={{ bg: 'gray.800' }}
+          p={6}
+          rounded="xl"
+          border="2px solid"
+          borderColor="brand.100"
+          _dark={{ borderColor: 'brand.800' }}
+          boxShadow="lg"
+          position="relative"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 6,
+            width: '60px',
+            height: '2px',
+            bg: 'brand.500',
+            borderRadius: '1px',
+          }}
         >
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            gap={6}
+            align={{ base: 'stretch', md: 'center' }}
+            justify="space-between"
+          >
           <HStack spacing={4} flex={1}>
             <FormControl maxW="150px">
               <FormLabel fontSize="sm" mb={1}>
@@ -230,7 +247,8 @@ export default function Home() {
               Clear All
             </Button>
           </HStack>
-        </Flex>
+          </Flex>
+        </Box>
 
         {/* Error Display */}
         {error && (
@@ -244,7 +262,7 @@ export default function Home() {
         )}
 
         {/* Editors */}
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} mt={2}>
           {/* Input Editor */}
           <VStack spacing={3} align="stretch">
             <Flex justify="space-between" align="center">
@@ -302,13 +320,34 @@ export default function Home() {
         </SimpleGrid>
 
         {/* Tips */}
-        <Box bg="blue.50" p={4} rounded="md" _dark={{ bg: 'blue.900' }}>
-          <Text fontSize="sm" color="blue.700" _dark={{ color: 'blue.200' }}>
-            <strong>💡 Tips:</strong> Paste any JSON to format it with proper indentation, or minify it to remove all whitespace.
-            You can adjust the indentation level using the controls above.
-            <br />
-            <strong>⌨️ Shortcuts:</strong> Ctrl+F to format, Ctrl+M to minify, Ctrl+K to clear all.
-          </Text>
+        <Box
+          bg="brand.50"
+          _dark={{ bg: 'brand.900' }}
+          p={6}
+          rounded="xl"
+          border="2px solid"
+          borderColor="brand.200"
+          _dark={{ borderColor: 'brand.700' }}
+          position="relative"
+          _before={{
+            content: '"💡"',
+            position: 'absolute',
+            top: 4,
+            left: 4,
+            fontSize: 'lg',
+          }}
+        >
+          <Box pl={8}>
+            <Text fontSize="sm" color="brand.700" _dark={{ color: 'brand.200' }} lineHeight="tall">
+              <Text as="span" fontWeight="bold">Tips:</Text>{' '}
+              Paste any JSON to format it with proper indentation, or minify it to remove all whitespace.
+              You can adjust the indentation level using the controls above.
+            </Text>
+            <Text fontSize="sm" color="brand.600" _dark={{ color: 'brand.300' }} mt={2} lineHeight="tall">
+              <Text as="span" fontWeight="bold">⌨️ Shortcuts:</Text>{' '}
+              Ctrl+F to format, Ctrl+M to minify, Ctrl+K to clear all.
+            </Text>
+          </Box>
         </Box>
       </VStack>
     </Layout>

@@ -169,8 +169,8 @@ export default function ComparePage() {
   const cardBg = useColorModeValue('white', 'gray.800')
 
   return (
-    <Layout>
-      <VStack spacing={6} align="stretch">
+    <Layout variant="wide">
+      <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Heading as="h1" size="xl" mb={2}>
             JSON Compare
@@ -181,16 +181,33 @@ export default function ComparePage() {
         </Box>
 
         {/* Controls */}
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          gap={4}
-          align={{ base: 'stretch', md: 'center' }}
-          justify="space-between"
+        <Box
           bg="gray.50"
-          p={4}
-          rounded="md"
           _dark={{ bg: 'gray.800' }}
+          p={6}
+          rounded="xl"
+          border="2px solid"
+          borderColor="purple.100"
+          _dark={{ borderColor: 'purple.800' }}
+          boxShadow="lg"
+          position="relative"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 6,
+            width: '60px',
+            height: '2px',
+            bg: 'purple.500',
+            borderRadius: '1px',
+          }}
         >
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            gap={6}
+            align={{ base: 'stretch', md: 'center' }}
+            justify="space-between"
+          >
           <FormControl display="flex" alignItems="center" maxW="200px">
             <FormLabel fontSize="sm" mb={0}>
               Auto-compare
@@ -231,7 +248,8 @@ export default function ComparePage() {
               Clear All
             </Button>
           </HStack>
-        </Flex>
+          </Flex>
+        </Box>
 
         {/* Error Display */}
         {error && (
@@ -245,7 +263,7 @@ export default function ComparePage() {
         )}
 
         {/* JSON Input Editors */}
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} mt={2}>
           <VStack spacing={3} align="stretch">
             <Text fontWeight="medium" fontSize="sm">
               JSON 1 (Left)
