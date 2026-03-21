@@ -29,6 +29,7 @@ import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonCodeFlow } from '@/components/JsonDecorations'
+import { FormatButton, MinifyButton, ClearButton } from '@/components/JsonButton'
 import { JsonErrorAlert } from '@/components/JsonAlert'
 import { formatJson, minifyJson, getJsonSize, isValidJson } from '@/utils/jsonFormatter'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
@@ -223,36 +224,30 @@ export default function Home() {
             )}
           </HStack>
 
-          <HStack spacing={2}>
-            <Button
-              colorScheme="blue"
+          <HStack spacing={3}>
+            <FormatButton
               onClick={handleFormat}
               isLoading={isProcessing && lastOperation !== 'minify'}
-              loadingText="Formatting..."
               isDisabled={!input.trim()}
               size="sm"
             >
               Format
-            </Button>
-            <Button
-              colorScheme="green"
-              variant="outline"
+            </FormatButton>
+            <MinifyButton
               onClick={handleMinify}
               isLoading={isProcessing && lastOperation !== 'format'}
-              loadingText="Minifying..."
               isDisabled={!input.trim()}
               size="sm"
             >
               Minify
-            </Button>
-            <Button
-              variant="ghost"
+            </MinifyButton>
+            <ClearButton
               onClick={handleClear}
               isDisabled={!input && !output}
               size="sm"
             >
               Clear All
-            </Button>
+            </ClearButton>
           </HStack>
           </Flex>
         </Box>

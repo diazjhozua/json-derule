@@ -42,6 +42,7 @@ import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
+import { CompareButton, SwapButton, ClearButton } from '@/components/JsonButton'
 import { compareJson, formatValueForDisplay, getDifferenceColor } from '@/utils/jsonComparison'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ComparisonResult, Difference } from '@/types'
@@ -220,34 +221,30 @@ export default function ComparePage() {
             />
           </FormControl>
 
-          <HStack spacing={2}>
-            <Button
-              colorScheme="purple"
+          <HStack spacing={3}>
+            <CompareButton
               onClick={handleCompare}
               isLoading={isComparing}
-              loadingText="Comparing..."
               isDisabled={!json1.trim() || !json2.trim() || autoCompare}
               size="sm"
             >
               Compare
-            </Button>
-            <Button
-              variant="outline"
+            </CompareButton>
+            <SwapButton
               onClick={handleSwap}
               leftIcon={<Icon as={FiRefreshCw} />}
               isDisabled={!json1.trim() && !json2.trim()}
               size="sm"
             >
               Swap
-            </Button>
-            <Button
-              variant="ghost"
+            </SwapButton>
+            <ClearButton
               onClick={handleClear}
               isDisabled={!json1.trim() && !json2.trim()}
               size="sm"
             >
               Clear All
-            </Button>
+            </ClearButton>
           </HStack>
           </Flex>
         </Box>

@@ -18,6 +18,7 @@ import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LogoMark } from './Logo'
+import JsonThemeToggle from './JsonThemeToggle'
 
 const NavLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
   const pathname = usePathname()
@@ -99,29 +100,7 @@ export default function Navigation() {
         </HStack>
 
         <HStack spacing={3}>
-          <Box
-            as="button"
-            onClick={toggleColorMode}
-            w="32px"
-            h="32px"
-            borderRadius="lg"
-            color="gray.600"
-            bg="transparent"
-            border="none"
-            cursor="pointer"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            lineHeight="1"
-            _hover={{
-              bg: useColorModeValue('brand.50', 'brand.900'),
-              color: 'brand.600',
-              transform: 'scale(1.05)',
-            }}
-            transition="all 0.2s ease"
-          >
-            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-          </Box>
+          <JsonThemeToggle />
           <Box
             as="button"
             w="32px"

@@ -36,6 +36,7 @@ import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
+import { ValidateButton, ClearButton } from '@/components/JsonButton'
 import { validateJson, formatValidationError } from '@/utils/jsonValidator'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ValidationResult, JsonStats } from '@/types'
@@ -164,25 +165,22 @@ export default function ValidatorPage() {
             />
           </FormControl>
 
-          <HStack spacing={2}>
-            <Button
-              colorScheme="blue"
+          <HStack spacing={3}>
+            <ValidateButton
               onClick={handleValidate}
               isLoading={isValidating}
-              loadingText="Validating..."
               isDisabled={!input.trim() || autoValidate}
               size="sm"
             >
               Validate
-            </Button>
-            <Button
-              variant="ghost"
+            </ValidateButton>
+            <ClearButton
               onClick={handleClear}
               isDisabled={!input}
               size="sm"
             >
               Clear
-            </Button>
+            </ClearButton>
           </HStack>
           </Flex>
         </Box>
