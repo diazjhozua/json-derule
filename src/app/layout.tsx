@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   robots: 'index, follow',
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: '16x16', type: 'image/x-icon' },
       { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
     ],
@@ -48,6 +49,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
