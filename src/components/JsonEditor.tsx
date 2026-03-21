@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { CopyIcon, DeleteIcon } from '@chakra-ui/icons'
 import { useState, useRef, useEffect } from 'react'
+import { JsonEmptyState, CornerBrackets } from './JsonDecorations'
 
 interface JsonEditorProps {
   value: string
@@ -211,6 +212,18 @@ export default function JsonEditor({
 
           {/* Code Editor */}
           <Box flex={1} position="relative">
+            {!value && !isReadOnly && (
+              <Box position="absolute" inset={0} zIndex={1} pointerEvents="none">
+                <JsonEmptyState
+                  title="Start typing JSON"
+                  description="Paste or type your JSON content here"
+                  showAnimation={true}
+                />
+              </Box>
+            )}
+
+            <CornerBrackets size="sm" />
+
             <Textarea
               ref={textareaRef}
               value={value}

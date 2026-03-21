@@ -40,6 +40,7 @@ import { FiGitCompare, FiPlus, FiMinus, FiEdit, FiRefreshCw } from 'react-icons/
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
+import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { compareJson, formatValueForDisplay, getDifferenceColor } from '@/utils/jsonComparison'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ComparisonResult, Difference } from '@/types'
@@ -170,7 +171,10 @@ export default function ComparePage() {
 
   return (
     <Layout variant="wide">
-      <VStack spacing={10} align="stretch">
+      <Box position="relative">
+        <FloatingBrackets animate={true} />
+
+        <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Heading as="h1" size="xl" mb={2}>
             JSON Compare
@@ -300,8 +304,11 @@ export default function ComparePage() {
               <Card bg={cardBg}>
                 <CardBody>
                   <Box textAlign="center" py={8}>
-                    <Icon as={FiGitCompare} boxSize={8} color="purple.400" mb={4} />
-                    <Text color="gray.500">Comparing JSON objects...</Text>
+                    <VStack spacing={6}>
+                      <JsonLoadingDots />
+                      <Icon as={FiGitCompare} boxSize={8} color="purple.400" />
+                      <Text color="gray.500">Comparing JSON objects...</Text>
+                    </VStack>
                   </Box>
                 </CardBody>
               </Card>
@@ -524,7 +531,8 @@ export default function ComparePage() {
             <strong>⌨️ Shortcuts:</strong> Ctrl+R to compare (when auto-compare is off), Ctrl+S to swap inputs, Ctrl+K to clear all.
           </Text>
         </Box>
-      </VStack>
+        </VStack>
+      </Box>
     </Layout>
   )
 }

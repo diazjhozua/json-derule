@@ -27,6 +27,8 @@ import { useState } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
 import Logo from '@/components/Logo'
+import { FloatingBrackets, JsonCodeFlow } from '@/components/JsonDecorations'
+import { JsonErrorAlert } from '@/components/JsonAlert'
 import { formatJson, minifyJson, getJsonSize, isValidJson } from '@/utils/jsonFormatter'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { FormatResult } from '@/types'
@@ -145,7 +147,11 @@ export default function Home() {
 
   return (
     <Layout variant="wide">
-      <VStack spacing={10} align="stretch">
+      <Box position="relative">
+        <FloatingBrackets animate={true} />
+        <JsonCodeFlow />
+
+        <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Logo size="lg" showSubtext={true} animate={true} />
           <Text color="gray.600" mt={4}>
@@ -252,13 +258,10 @@ export default function Home() {
 
         {/* Error Display */}
         {error && (
-          <Alert status="error" rounded="md">
-            <AlertIcon />
-            <Box>
-              <AlertTitle>Invalid JSON!</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Box>
-          </Alert>
+          <JsonErrorAlert
+            error={error}
+            suggestion="Check your JSON syntax - missing quotes, commas, or brackets might be the issue."
+          />
         )}
 
         {/* Editors */}
@@ -349,7 +352,8 @@ export default function Home() {
             </Text>
           </Box>
         </Box>
-      </VStack>
+        </VStack>
+      </Box>
     </Layout>
   )
 }

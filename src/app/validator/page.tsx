@@ -33,6 +33,7 @@ import { FiCode, FiLayers, FiHash, FiType } from 'react-icons/fi'
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import JsonEditor from '@/components/JsonEditor'
+import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { validateJson, formatValidationError } from '@/utils/jsonValidator'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ValidationResult, JsonStats } from '@/types'
@@ -113,7 +114,10 @@ export default function ValidatorPage() {
 
   return (
     <Layout variant="wide">
-      <VStack spacing={10} align="stretch">
+      <Box position="relative">
+        <FloatingBrackets animate={true} />
+
+        <VStack spacing={10} align="stretch">
         <Box textAlign="center">
           <Heading as="h1" size="xl" mb={2}>
             JSON Validator
@@ -367,7 +371,10 @@ export default function ValidatorPage() {
                 </VStack>
               ) : isValidating ? (
                 <Box textAlign="center" py={20}>
-                  <Text color="gray.500">Validating JSON...</Text>
+                  <VStack spacing={4}>
+                    <JsonLoadingDots />
+                    <Text color="gray.500">Validating JSON...</Text>
+                  </VStack>
                 </Box>
               ) : (
                 <Box textAlign="center" py={20}>
@@ -390,7 +397,8 @@ export default function ValidatorPage() {
             <strong>⌨️ Shortcuts:</strong> Ctrl+V to validate (when auto-validate is off), Ctrl+K to clear.
           </Text>
         </Box>
-      </VStack>
+        </VStack>
+      </Box>
     </Layout>
   )
 }
