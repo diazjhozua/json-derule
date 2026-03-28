@@ -40,6 +40,7 @@ import Logo from '@/components/Logo'
 import { FloatingBrackets, JsonLoadingDots } from '@/components/JsonDecorations'
 import { CompareButton, SwapButton, ClearButton } from '@/components/JsonButton'
 import { compareJson, formatValueForDisplay, getDifferenceColor } from '@/utils/jsonComparison'
+import { validateJson } from '@/utils/jsonValidator'
 import { useKeyboardShortcuts, createShortcuts } from '@/utils/useKeyboardShortcuts'
 import { ComparisonResult, Difference } from '@/types'
 
@@ -49,6 +50,8 @@ export default function ComparePage() {
   const [result, setResult] = useState<ComparisonResult | null>(null)
   const [isComparing, setIsComparing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [errorLine1, setErrorLine1] = useState<number | undefined>(undefined)
+  const [errorLine2, setErrorLine2] = useState<number | undefined>(undefined)
   const [autoCompare, setAutoCompare] = useState(false)
 
   const toast = useToast()
@@ -67,9 +70,25 @@ export default function ComparePage() {
 
     setIsComparing(true)
     setError(null)
+    setErrorLine1(undefined)
+    setErrorLine2(undefined)
 
     // Add delay for better UX
     setTimeout(() => {
+      // Validate each input separately to pinpoint which has the error
+      const v1 = validateJson(json1)
+      const v2 = validateJson(json2)
+
+      if (!v1.isValid || !v2.isValid) {
+        if (!v1.isValid) setErrorLine1(v1.errorLine)
+        if (!v2.isValid) setErrorLine2(v2.errorLine)
+        const which = !v1.isValid && !v2.isValid ? 'Both JSONs are' : !v1.isValid ? 'JSON 1 is' : 'JSON 2 is'
+        setError(`${which} invalid. Fix the highlighted error${!v1.isValid && !v2.isValid ? 's' : ''} before comparing.`)
+        setResult(null)
+        setIsComparing(false)
+        return
+      }
+
       try {
         const comparisonResult = compareJson(json1, json2)
         setResult(comparisonResult)
@@ -118,6 +137,8 @@ export default function ComparePage() {
     setJson2('')
     setResult(null)
     setError(null)
+    setErrorLine1(undefined)
+    setErrorLine2(undefined)
     toast({
       title: 'Cleared',
       description: 'All inputs and results have been cleared',
@@ -130,6 +151,8 @@ export default function ComparePage() {
   const handleSwap = () => {
     setJson1(json2)
     setJson2(json1)
+    setErrorLine1(errorLine2)
+    setErrorLine2(errorLine1)
     toast({
       title: 'Swapped',
       description: 'Left and right JSON inputs have been swapped',
@@ -250,7 +273,12 @@ export default function ComparePage() {
           <Alert status="error" rounded="md">
             <AlertIcon />
             <Box>
-              <AlertTitle>Comparison Error!</AlertTitle>
+              <AlertTitle>
+                {errorLine1 && !errorLine2 ? `Invalid JSON 1 — line ${errorLine1}` :
+                 errorLine2 && !errorLine1 ? `Invalid JSON 2 — line ${errorLine2}` :
+                 errorLine1 && errorLine2 ? `Invalid JSON 1 (line ${errorLine1}) & JSON 2 (line ${errorLine2})` :
+                 'Comparison Error'}
+              </AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Box>
           </Alert>
@@ -264,9 +292,10 @@ export default function ComparePage() {
             </Text>
             <JsonEditor
               value={json1}
-              onChange={setJson1}
+              onChange={(v) => { setJson1(v); setErrorLine1(undefined) }}
               placeholder="Paste first JSON here..."
               height="400px"
+              errorLine={errorLine1}
             />
           </VStack>
 
@@ -276,9 +305,10 @@ export default function ComparePage() {
             </Text>
             <JsonEditor
               value={json2}
-              onChange={setJson2}
+              onChange={(v) => { setJson2(v); setErrorLine2(undefined) }}
               placeholder="Paste second JSON here..."
               height="400px"
+              errorLine={errorLine2}
             />
           </VStack>
         </SimpleGrid>

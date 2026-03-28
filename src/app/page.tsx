@@ -34,6 +34,7 @@ export default function Home() {
   const [output, setOutput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [errorLine, setErrorLine] = useState<number | undefined>(undefined)
   const [indent, setIndent] = useState(2)
   const [lastOperation, setLastOperation] = useState<'format' | 'minify' | null>(null)
 
@@ -54,6 +55,7 @@ export default function Home() {
 
     setIsProcessing(true)
     setError(null)
+    setErrorLine(undefined)
 
     // Add small delay to show processing state for better UX
     setTimeout(() => {
@@ -71,7 +73,8 @@ export default function Home() {
         })
       } else {
         setError(result.error || 'Unknown error occurred')
-        setOutput('')
+        setErrorLine(result.errorLine)
+        setOutput(input)
         setLastOperation(null)
       }
 
@@ -93,6 +96,7 @@ export default function Home() {
 
     setIsProcessing(true)
     setError(null)
+    setErrorLine(undefined)
 
     setTimeout(() => {
       const result: FormatResult = minifyJson(input)
@@ -109,7 +113,8 @@ export default function Home() {
         })
       } else {
         setError(result.error || 'Unknown error occurred')
-        setOutput('')
+        setErrorLine(result.errorLine)
+        setOutput(input)
         setLastOperation(null)
       }
 
@@ -121,6 +126,7 @@ export default function Home() {
     setInput('')
     setOutput('')
     setError(null)
+    setErrorLine(undefined)
     setLastOperation(null)
     toast({
       title: 'Cleared',
@@ -250,7 +256,9 @@ export default function Home() {
         {/* Error Display */}
         {error && (
           <JsonErrorAlert
+            title={errorLine ? `Invalid JSON — line ${errorLine}` : 'Invalid JSON'}
             error={error}
+            line={errorLine}
             suggestion="Check your JSON syntax - missing quotes, commas, or brackets might be the issue."
           />
         )}
@@ -271,9 +279,10 @@ export default function Home() {
             </Flex>
             <JsonEditor
               value={input}
-              onChange={setInput}
+              onChange={(v) => { setInput(v); setErrorLine(undefined) }}
               placeholder="Paste your JSON here to format or minify..."
               height="500px"
+              errorLine={errorLine}
             />
           </VStack>
 

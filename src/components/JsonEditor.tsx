@@ -41,6 +41,7 @@ export default function JsonEditor({
   const [isCopying, setIsCopying] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lineNumbersRef = useRef<HTMLDivElement>(null)
+  const lineBgRef = useRef<HTMLDivElement>(null)
 
   const lineNumbersBg = useColorModeValue('gray.100', 'gray.800')
   const lineNumbersColor = useColorModeValue('gray.500', 'gray.400')
@@ -52,30 +53,30 @@ export default function JsonEditor({
   const placeholderColor = useColorModeValue('gray.400', 'gray.500')
   const charCountBg = useColorModeValue('rgba(255,255,255,0.9)', 'rgba(0,0,0,0.9)')
   const charCountBorder = useColorModeValue('gray.200', 'gray.600')
+  const errorHighlightBg = useColorModeValue('rgba(254,202,202,0.5)', 'rgba(254,178,178,0.15)')
+  const errorBorderColor = useColorModeValue('#f87171', '#fca5a5')
 
   // Calculate number of lines
   const lines = value.split('\n')
   const lineCount = Math.max(1, lines.length)
 
-  // Sync scroll between textarea and line numbers
+  // Sync all scroll-linked panels with the textarea
   const handleScroll = () => {
-    if (textareaRef.current && lineNumbersRef.current) {
-      lineNumbersRef.current.scrollTop = textareaRef.current.scrollTop
-    }
+    const scrollTop = textareaRef.current?.scrollTop ?? 0
+    if (lineNumbersRef.current) lineNumbersRef.current.scrollTop = scrollTop
+    if (lineBgRef.current) lineBgRef.current.scrollTop = scrollTop
   }
 
   // Scroll to error line when it changes
   useEffect(() => {
     if (errorLine && textareaRef.current) {
       const el = textareaRef.current
-      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 19.6
-      const paddingTop = parseFloat(getComputedStyle(el).paddingTop) || 16
-      const offset = paddingTop + (errorLine - 1) * lineHeight
-      // Center the error line in the viewport
-      el.scrollTop = Math.max(0, offset - el.clientHeight / 2)
-      if (lineNumbersRef.current) {
-        lineNumbersRef.current.scrollTop = el.scrollTop
-      }
+      const lh = 19.6, pt = 16
+      const offset = pt + (errorLine - 1) * lh
+      const scrollTop = Math.max(0, offset - el.clientHeight / 2)
+      el.scrollTop = scrollTop
+      if (lineNumbersRef.current) lineNumbersRef.current.scrollTop = scrollTop
+      if (lineBgRef.current) lineBgRef.current.scrollTop = scrollTop
     }
   }, [errorLine])
 
@@ -239,6 +240,35 @@ export default function JsonEditor({
             )}
 
             <CornerBrackets size="sm" />
+
+            {/* Error line background layer — scrolls in sync with the textarea */}
+            {errorLine && !isReadOnly && (
+              <Box
+                ref={lineBgRef}
+                position="absolute"
+                inset={0}
+                overflow="hidden"
+                pointerEvents="none"
+                py={4}
+                fontSize="sm"
+                fontFamily="mono"
+                lineHeight="1.4"
+              >
+                {Array.from({ length: lineCount }, (_, i) => {
+                  const lineNum = i + 1
+                  const isError = errorLine === lineNum
+                  return (
+                    <Box
+                      key={lineNum}
+                      height="1.4em"
+                      mb={0}
+                      bg={isError ? errorHighlightBg : 'transparent'}
+                      borderLeft={isError ? `3px solid ${errorBorderColor}` : undefined}
+                    />
+                  )
+                })}
+              </Box>
+            )}
 
             <Textarea
               ref={textareaRef}

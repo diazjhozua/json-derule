@@ -56,20 +56,32 @@ function parseJsonError(error: Error, input: string): ValidationResult {
   let errorColumn: number | undefined
   let suggestion: string | undefined
 
-  // Extract position information from error message
-  const positionMatch = message.match(/position (\d+)/)
-  if (positionMatch) {
-    const position = parseInt(positionMatch[1], 10)
-    const lines = input.substring(0, position).split('\n')
-    errorLine = lines.length
-    errorColumn = lines[lines.length - 1].length + 1
-  }
-
-  // Extract line information if available
-  const lineMatch = message.match(/line (\d+)/)
+  // "line N" format — Firefox, Node.js v20+
+  const lineMatch = message.match(/\bline (\d+)/i)
   if (lineMatch) {
     errorLine = parseInt(lineMatch[1], 10)
+    const colMatch = message.match(/column (\d+)/i)
+    errorColumn = colMatch ? parseInt(colMatch[1], 10) : undefined
   }
+
+  // "position N" format — Chrome/V8 (only if line not already found)
+  if (!errorLine) {
+    const positionMatch = message.match(/\bposition (\d+)/)
+    if (positionMatch) {
+      const position = parseInt(positionMatch[1], 10)
+      const lines = input.substring(0, position).split('\n')
+      errorLine = lines.length
+      errorColumn = lines[lines.length - 1].length + 1
+    }
+  }
+
+  // "Unexpected end" — point to last non-empty line
+  if (!errorLine && /end/i.test(message)) {
+    errorLine = input.split('\n').reduce((acc, line, i) => (line.trim() ? i + 1 : acc), 1)
+  }
+
+  // Last resort
+  if (!errorLine) errorLine = 1
 
   // Provide suggestions based on common errors
   if (message.includes('Unexpected token')) {

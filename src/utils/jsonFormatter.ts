@@ -5,17 +5,26 @@ export interface FormatResult {
   errorLine?: number
 }
 
-function extractErrorLine(errorMessage: string, input: string): number | undefined {
-  const lineMatch = errorMessage.match(/line (\d+)/i)
+function extractErrorLine(errorMessage: string, input: string): number {
+  // "line N" format — Firefox, Node.js v20+
+  const lineMatch = errorMessage.match(/\bline (\d+)/i)
   if (lineMatch) return parseInt(lineMatch[1], 10)
 
-  const positionMatch = errorMessage.match(/position (\d+)/)
+  // "position N" format — Chrome/V8
+  const positionMatch = errorMessage.match(/\bposition (\d+)/)
   if (positionMatch) {
     const position = parseInt(positionMatch[1], 10)
     return input.substring(0, position).split('\n').length
   }
 
-  return undefined
+  // "Unexpected end of JSON input" — the error is at the last non-empty line
+  if (/end/i.test(errorMessage)) {
+    const lastNonEmpty = input.split('\n').reduce((acc, line, i) => (line.trim() ? i + 1 : acc), 1)
+    return lastNonEmpty
+  }
+
+  // Last resort: highlight line 1
+  return 1
 }
 
 /**
