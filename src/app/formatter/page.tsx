@@ -35,6 +35,7 @@ export default function FormatterPage() {
   const [output, setOutput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [errorLine, setErrorLine] = useState<number | undefined>(undefined)
   const [indent, setIndent] = useState(2)
   const [lastOperation, setLastOperation] = useState<'format' | 'minify' | null>(null)
 
@@ -54,6 +55,7 @@ export default function FormatterPage() {
 
     setIsProcessing(true)
     setError(null)
+    setErrorLine(undefined)
 
     // Add small delay to show processing state for better UX
     setTimeout(() => {
@@ -71,7 +73,8 @@ export default function FormatterPage() {
         })
       } else {
         setError(result.error || 'Unknown error occurred')
-        setOutput('')
+        setErrorLine(result.errorLine)
+        setOutput(input) // show raw input as best-effort
         setLastOperation(null)
       }
 
@@ -93,6 +96,7 @@ export default function FormatterPage() {
 
     setIsProcessing(true)
     setError(null)
+    setErrorLine(undefined)
 
     setTimeout(() => {
       const result: FormatResult = minifyJson(input)
@@ -109,7 +113,8 @@ export default function FormatterPage() {
         })
       } else {
         setError(result.error || 'Unknown error occurred')
-        setOutput('')
+        setErrorLine(result.errorLine)
+        setOutput(input) // show raw input as best-effort
         setLastOperation(null)
       }
 
@@ -121,6 +126,7 @@ export default function FormatterPage() {
     setInput('')
     setOutput('')
     setError(null)
+    setErrorLine(undefined)
     setLastOperation(null)
     toast({
       title: 'Cleared',
@@ -238,7 +244,9 @@ export default function FormatterPage() {
           <Alert status="error" rounded="md">
             <AlertIcon />
             <Box>
-              <AlertTitle>Invalid JSON!</AlertTitle>
+              <AlertTitle>
+                Invalid JSON{errorLine ? ` — line ${errorLine}` : ''}
+              </AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Box>
           </Alert>
@@ -263,6 +271,7 @@ export default function FormatterPage() {
               onChange={setInput}
               placeholder="Paste your JSON here to format or minify..."
               height="500px"
+              errorLine={errorLine}
             />
           </VStack>
 
@@ -274,6 +283,11 @@ export default function FormatterPage() {
                 {lastOperation && (
                   <Badge ml={2} colorScheme="blue" size="sm">
                     {lastOperation === 'format' ? 'Formatted' : 'Minified'}
+                  </Badge>
+                )}
+                {error && output && (
+                  <Badge ml={2} colorScheme="orange" size="sm">
+                    Raw (invalid)
                   </Badge>
                 )}
               </Text>

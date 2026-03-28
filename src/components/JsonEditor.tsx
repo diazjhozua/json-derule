@@ -13,7 +13,7 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import { CopyIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { JsonEmptyState, CornerBrackets } from './JsonDecorations'
 
 interface JsonEditorProps {
@@ -24,6 +24,7 @@ interface JsonEditorProps {
   isReadOnly?: boolean
   height?: string
   minHeight?: string
+  errorLine?: number
 }
 
 export default function JsonEditor({
@@ -34,6 +35,7 @@ export default function JsonEditor({
   isReadOnly = false,
   height = '400px',
   minHeight = '200px',
+  errorLine,
 }: JsonEditorProps) {
   const toast = useToast()
   const [isCopying, setIsCopying] = useState(false)
@@ -61,6 +63,21 @@ export default function JsonEditor({
       lineNumbersRef.current.scrollTop = textareaRef.current.scrollTop
     }
   }
+
+  // Scroll to error line when it changes
+  useEffect(() => {
+    if (errorLine && textareaRef.current) {
+      const el = textareaRef.current
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 19.6
+      const paddingTop = parseFloat(getComputedStyle(el).paddingTop) || 16
+      const offset = paddingTop + (errorLine - 1) * lineHeight
+      // Center the error line in the viewport
+      el.scrollTop = Math.max(0, offset - el.clientHeight / 2)
+      if (lineNumbersRef.current) {
+        lineNumbersRef.current.scrollTop = el.scrollTop
+      }
+    }
+  }, [errorLine])
 
   const handleCopy = async () => {
     try {
@@ -184,21 +201,29 @@ export default function JsonEditor({
               opacity: 0.5,
             }}
           >
-            {Array.from({ length: lineCount }, (_, i) => (
-              <Text
-                key={i + 1}
-                as="div"
-                color={lineNumbersColor}
-                textAlign="right"
-                px={2}
-                height="1.4em"
-                lineHeight="1.4"
-                fontSize="sm"
-                mb={0}
-              >
-                {i + 1}
-              </Text>
-            ))}
+            {Array.from({ length: lineCount }, (_, i) => {
+              const lineNum = i + 1
+              const isError = errorLine === lineNum
+              return (
+                <Text
+                  key={lineNum}
+                  as="div"
+                  color={isError ? 'red.500' : lineNumbersColor}
+                  bg={isError ? 'red.100' : 'transparent'}
+                  _dark={{ bg: isError ? 'rgba(254,178,178,0.15)' : 'transparent' }}
+                  textAlign="right"
+                  px={2}
+                  height="1.4em"
+                  lineHeight="1.4"
+                  fontSize="sm"
+                  fontWeight={isError ? 'bold' : 'normal'}
+                  mb={0}
+                  title={isError ? `Error on line ${lineNum}` : undefined}
+                >
+                  {isError ? '→' : lineNum}
+                </Text>
+              )
+            })}
           </Box>
 
           {/* Code Editor */}

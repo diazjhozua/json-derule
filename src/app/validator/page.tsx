@@ -193,6 +193,7 @@ export default function ValidatorPage() {
               onChange={setInput}
               placeholder="Paste your JSON here to validate..."
               height="500px"
+              errorLine={result && !result.isValid ? result.errorLine : undefined}
             />
           </VStack>
 

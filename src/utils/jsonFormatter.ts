@@ -5,6 +5,19 @@ export interface FormatResult {
   errorLine?: number
 }
 
+function extractErrorLine(errorMessage: string, input: string): number | undefined {
+  const lineMatch = errorMessage.match(/line (\d+)/i)
+  if (lineMatch) return parseInt(lineMatch[1], 10)
+
+  const positionMatch = errorMessage.match(/position (\d+)/)
+  if (positionMatch) {
+    const position = parseInt(positionMatch[1], 10)
+    return input.substring(0, position).split('\n').length
+  }
+
+  return undefined
+}
+
 /**
  * Formats JSON string with proper indentation
  */
@@ -26,15 +39,10 @@ export function formatJson(input: string, indent: number = 2): FormatResult {
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
-    // Try to extract line number from error message
-    const lineMatch = errorMessage.match(/line (\d+)/i) || errorMessage.match(/position (\d+)/)
-    const errorLine = lineMatch ? parseInt(lineMatch[1], 10) : undefined
-
     return {
       success: false,
       error: errorMessage,
-      errorLine,
+      errorLine: extractErrorLine(errorMessage, input),
     }
   }
 }
@@ -60,13 +68,10 @@ export function minifyJson(input: string): FormatResult {
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    const lineMatch = errorMessage.match(/line (\d+)/i) || errorMessage.match(/position (\d+)/)
-    const errorLine = lineMatch ? parseInt(lineMatch[1], 10) : undefined
-
     return {
       success: false,
       error: errorMessage,
-      errorLine,
+      errorLine: extractErrorLine(errorMessage, input),
     }
   }
 }
