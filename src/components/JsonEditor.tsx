@@ -187,11 +187,14 @@ export default function JsonEditor({
             {Array.from({ length: lineCount }, (_, i) => (
               <Text
                 key={i + 1}
+                as="div"
                 color={lineNumbersColor}
                 textAlign="right"
                 px={2}
                 height="1.4em"
+                lineHeight="1.4"
                 fontSize="sm"
+                mb={0}
               >
                 {i + 1}
               </Text>
